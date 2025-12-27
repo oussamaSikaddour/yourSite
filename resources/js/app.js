@@ -2,7 +2,7 @@
 // Core Components
 // ------------------------------------------------------
 import Navigation from "./core/components/Header.js";
-import Sidebar from "./core/components/Sidebar.js";
+import Sidebar from "./core/components/sidebar.js";
 import Lang from "./core/components/Lang.js";
 
 // ------------------------------------------------------
