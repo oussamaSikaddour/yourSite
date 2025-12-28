@@ -42,7 +42,7 @@ return [
     'wilaya' => [
         'actions' => [
             'add' => 'إضافة ولاية جديدة',
-            'update' => 'تحديث الولاية: :code',
+            'update' => 'تحديث الولاية: :name',
             'manage' => [
                 'view' => 'عرض تفاصيل الولاية',
             ],
@@ -51,7 +51,8 @@ return [
     'daira' => [
         'actions' => [
             'add' => 'إضافة دائرة جديدة',
-            'update' => 'تحديث الدائرة: :code',
+            'update' => 'تحديث الدائرة: :name',
+            'manage' => "إدارة بلديات الدائرة :name"
         ],
     ],
     'bank' => [
@@ -114,6 +115,24 @@ return [
             'add' => 'إضافة قسم جديد',
             'update' => 'تحديث القسم :name',
             "manage_coordinators" => "إدارة منسقي :name",
+        ],
+    ],
+    'bonus' => [
+        'actions' => [
+            'add' => 'إضافة مكافأة جديدة',
+            'update' => 'تحديث المكافأة',
+        ],
+    ],
+    'global_transfer' => [
+        'actions' => [
+            'add' => 'إضافة تحويل عام جديد',
+            'update' => 'تحديث التحويل العام',
+        ],
+    ],
+    'transfer' => [
+        'actions' => [
+            'add' => 'إضافة تحويل جديد',
+            'update' => "تحديث تحويل :name",
         ],
     ],
 ];

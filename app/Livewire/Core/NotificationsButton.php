@@ -29,7 +29,7 @@ class NotificationsButton extends Component
         // Admin-specific notifications
         if (auth()->user()->can('admin-access')) {
             $query->where('active', true)
-                ->where('for_type', NotificationFor::ADMIN);
+                ->where('for_type', NotificationFor::ADMIN->value);
         } else {
             $query->where('targetable_id', auth()->user()->id)
                 ->where('active', true);
@@ -46,22 +46,22 @@ class NotificationsButton extends Component
     // Manage notification (mark as inactive and handle redirection)
     public function manageNotification(Notification $notification)
     {
-        $notification->update(['active' => false]);
 
 
-        if ($notification->for_type ===NotificationFor::ADMIN && $notification->targetable_type===Message::class) {
-            return redirect()->route(RoutesNames::MESSAGES);
+        //  $notification->update(['active' => false]);
+        if ($notification->for_type->value === NotificationFor::ADMIN->value && $notification->targetable_type == Message::class) {
+            return redirect()->route(RoutesNames::MESSAGES->value);
         }
     }
 
     public function getNotificationMessageKey($notification)
-{
-    return match ($notification->targetable_type) {
-        Message::class => 'notifications.message.' . $notification->message,
-        User::class => 'notifications.user.' . $notification->message,
-        default => 'notifications.general.' . $notification->message,
-    };
-}
+    {
+        return match ($notification->targetable_type) {
+            Message::class => 'notifications.message.' . $notification->message,
+            User::class => 'notifications.user.' . $notification->message,
+            default => 'notifications.general.' . $notification->message,
+        };
+    }
 
 
     public function render()

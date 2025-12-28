@@ -18,4 +18,6 @@ Route::group(['middleware' => ['maintenance']], function () {
         ->name(RoutesNames::SERVICE_DETAILS_PUBLIC->value);
     Route::get('/publicServices', [GuestController::class, 'showServicesPublicPage'])
         ->name(RoutesNames::SERVICES_PUBLIC->value);
+            Route::get('/news', [GuestController::class, 'showNewsPage'])
+        ->name(RoutesNames::NEWS_ROUTE->value);
 });

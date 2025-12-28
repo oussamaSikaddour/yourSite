@@ -110,7 +110,7 @@ const LandingPageNavigation = () => {
   const HeroLinks = document.querySelectorAll(`a[href="#hero"]`);
 
   if (HeroLinks) {
-    HeroLinks[0].click();
+    HeroLinks[0]?.click();
   }
 };
 

@@ -68,17 +68,17 @@
                                 <x-core.button variant="danger" icon="delete" function="openDeleteDialog"
                                     :parameters="[$externalLink]" rounded=true hasTooltip=true :tooltip="__('toolTips.external_link.delete')" />
 
-                                <livewire:core.open-modal-button wire:key="edit-EL-{{ $p->id }}" rounded=true
+                                <livewire:core.open-modal-button wire:key="edit-EL-{{ $externalLink->id }}" rounded=true
                                     hasTooltip=true :tooltip="__('toolTips.external_link.update')" icon="edit"
                                     modalTitle="modals.external_link.actions.update" :modalContent="[
                                         'name' => 'core.admin.external-link-modal',
                                         'parameters' => ['id' => $externalLink->id],
                                     ]" />
-                                />
+
 
 
                             </td>
-                            <td scope="row">{{ $externalLink->localized_name }}</td>
+                            <td scope="row">{{ $externalLink->name }}</td>
                             <td>{{ $externalLink->url }}</td>
                             <td>{{ $externalLink->created_at->format('Y-m-d') }}</td>
                         </tr>

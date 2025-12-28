@@ -47,7 +47,7 @@
 
                     // Update Livewire content when mouse leaves the editor
                     if (!viewOnly) {
-                        editor.on('MouseLeave', () => {
+                        editor.on('change keyup blur', () => {
                             @this.call('setContent', editor.getContent());
                         });
                     }

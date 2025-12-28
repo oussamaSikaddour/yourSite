@@ -31,7 +31,7 @@
                 </div>
                 <ol class="nav__items">
                     <x-core.nav.link route="LOGIN" :label="__('pages.login.name')" />
-                    <x-core.nav.link route="REGISTER" :label="__('pages.register.name')" />
+                    {{-- <x-core.nav.link route="REGISTER" :label="__('pages.register.name')" /> --}}
 
                     @if (isset($this->menus) && count($this->menus))
                         @foreach ($this->menus as $menu)
@@ -67,6 +67,7 @@
                     <x-core.nav.link route="#aboutUs" :label="__('pages.landing_page.links.about_us')" />
                     <x-core.nav.link route="#services" :label="__('pages.landing_page.links.services')" />
                     <x-core.nav.link route="#contactUs" :label="__('pages.landing_page.links.contact_us')" />
+                    <x-core.nav.link route="news_route" :label="__('pages.news.name')" />
 
                     <x-core.nav.link route="dashboard" :label="__('pages.dashboard.name')" />
                 </ol>
@@ -88,10 +89,11 @@
                     <x-core.nav.link route="#aboutUs" :label="__('pages.landing_page.links.about_us')" />
                     <x-core.nav.link route="#services" :label="__('pages.landing_page.links.services')" />
                     <x-core.nav.link route="#contactUs" :label="__('pages.landing_page.links.contact_us')" />
+                    <x-core.nav.link route="news_route" :label="__('pages.news.name')" />
                 </ol>
                 <ol class="nav__items">
                     <x-core.nav.link route="LOGIN" :label="__('pages.login.name')" />
-                    <x-core.nav.link route="REGISTER" :label="__('pages.register.name')" />
+                    {{-- <x-core.nav.link route="REGISTER" :label="__('pages.register.name')" /> --}}
 
                     @if (isset($this->menus) && count($this->menus))
                         @foreach ($this->menus as $menu)

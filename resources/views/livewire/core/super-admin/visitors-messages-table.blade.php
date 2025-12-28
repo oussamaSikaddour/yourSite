@@ -36,7 +36,7 @@
 
     @if (isset($this->messages) && $this->messages->isNotEmpty())
         <div class="table__body">
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="column">
@@ -59,13 +59,13 @@
                                 variant="danger"
                                 icon="delete"
                                 function="openDeleteDialog"
-                                :parameters="[$message]"
+                                :parameters="[$m]"
                                 rounded=true hasTooltip=true
                                 :tooltip="__('toolTips.message.delete')"
                                 />
                                 <livewire:core.open-modal-button
 
-                                     wire:key="reply-{{ $message->id }}"
+                                     wire:key="reply-{{ $m->id }}"
                                      rounded=true
                                      hasTooltip=true icon="edit"
                                      :tooltip="__('toolTips.message.reply')"

@@ -1,6 +1,6 @@
 <div class="table__container" x-on:update-dairates-table.window="$wire.$refresh()">
     <div class="table__header">
-        <h3>@lang('tables.dairas.info')</h3>
+        <h3>@lang('tables.dairates.info',['name'=>$wilayaName])</h3>
         <div class="table__header__actions">
             @canany(['super-admin-access', 'admin-access'])
                 <span wire:loading wire:target="excelFile">
@@ -86,7 +86,7 @@
                                     ]" />
                                 <livewire:core.open-modal-button wire:key="m-communes-{{ $daira->id }}" rounded=true
                                     hasTooltip=true icon="commune" :tooltip="__('toolTips.daira.manage.communes')"
-                                    modalTitle="modals.daira.actions.manage.communes" :modalTitleOptions="['code' => $daira->code]"
+                                    modalTitle="modals.daira.actions.manage" :modalTitleOptions="['name' => $daira->localized_designation]"
                                     :modalContent="[
                                         'name' => 'core.super-admin.commune-modal',
                                         'parameters' => ['daira' => $daira],

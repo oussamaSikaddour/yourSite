@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enum\NotificationFor;
+use App\Enum\Core\NotificationFor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;

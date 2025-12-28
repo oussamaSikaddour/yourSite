@@ -166,7 +166,7 @@
         {{ $this->persons->links('components.core.pagination') }}
     @else
         <div class="table__footer">
-            <h2>@lang('tables.persons.not_found')</h2>
+            <h2>@lang('tables.persons.empty')</h2>
         </div>
     @endif
 </div>

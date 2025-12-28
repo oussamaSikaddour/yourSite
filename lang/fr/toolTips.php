@@ -219,14 +219,14 @@ return [
     ],
 
     "transfer" => [
-        "delete" => "Supprimer le transfert",
-        "update" => "Modifier le transfert",
+        "delete" => "Supprimer le virement",
+        "update" => "Modifier le virement",
         "generate" => "Générer le fichier EDI",
         "excel" => [
-            "upload" => "Importer les transferts",
-            "export" => "Exporter les transferts",
+            "upload" => "Importer les virements",
+            "export" => "Exporter les virements",
             "empty" => "Télécharger le modèle"
         ],
-        "bonuses" => "Gérer les bonus"
+        "bonuses" => "Ajouter les primes sélectionnées aux virements"
     ],
 ];

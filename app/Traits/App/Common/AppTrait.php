@@ -61,39 +61,5 @@ trait AppTrait
         return $string;
     }
 
-    /**
-     * Sets or adjusts the slide order in a slider context.
-     *
-     * If $data['order'] is set, it will shift all slides greater than or equal to that order.
-     * If not set, it will place the slide at the end.
-     *
-     * @param array $data Data containing the 'order' key.
-     * @param \App\Models\Slider $slider The slider object.
-     * @param bool $minus Whether to decrement (`true`) or increment (`false`) the order of affected slides.
-     * @return array The modified $data array with resolved order.
-     */
-    public function setSlideOrder($data, $slider, $minus = false)
-    {
-        if (isset($data['order'])) {
-            if ($minus) {
-                // Decrement order of slides starting from given order
-                DB::update(
-                    'update slides set `order` = `order` - 1 where slider_id = ? and `order` >= ?',
-                    [$slider->id, $data['order']]
-                );
-            } else {
-                // Increment order of slides starting from given order
-                DB::update(
-                    'update slides set `order` = `order` + 1 where slider_id = ? and `order` >= ?',
-                    [$slider->id, $data['order']]
-                );
-            }
-        } else {
-            // If no order is provided, place the slide at the end
-            $maxOrder = $slider->slides()->max('order') ?? 0;
-            $data['order'] = $maxOrder + 1;
-        }
 
-        return $data;
-    }
 }

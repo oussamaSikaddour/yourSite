@@ -42,7 +42,7 @@ return [
     'wilaya' => [
         'actions' => [
             'add' => 'Ajouter une nouvelle wilaya',
-            'update' => 'Mettre à jour la wilaya : :code',
+            'update' => 'Mettre à jour la wilaya : :name',
             'manage' => [
                 'view' => 'Voir les détails de la wilaya',
             ],
@@ -51,7 +51,8 @@ return [
     'daira' => [
         'actions' => [
             'add' => 'Ajouter une nouvelle daïra',
-            'update' => 'Mettre à jour la daïra : :code',
+            'update' => 'Mettre à jour la daïra : :name',
+            'manage' => "Gérer les communes de la daïra :name"
         ],
     ],
     'bank' => [
@@ -95,12 +96,12 @@ return [
             'update' => 'Mettre à jour la diapositive sélectionnée',
         ],
     ],
-'article' => [
-    'actions' => [
-        'add' => 'Ajouter un nouvel article pour :name',
-        'update' => 'Mettre à jour l\'article :title',
+    'article' => [
+        'actions' => [
+            'add' => 'Ajouter un nouvel article pour :name',
+            'update' => 'Mettre à jour l\'article :title',
+        ],
     ],
-],
     'trend' => [
         'actions' => [
             'add' => 'Ajouter une nouvelle tendance',
@@ -116,4 +117,22 @@ return [
             "manage_coordinators" => "Gérer les coordinateurs de :name",
         ],
     ],
+    'bonus' => [
+        'actions' => [
+            'add' => 'Ajouter une nouvelle prime',
+            'update' => 'Mettre à jour la prime',
+        ],
+    ],
+    'global_transfer' => [
+        'actions' => [
+            'add' => 'Ajouter un nouveau transfert global',
+            'update' => 'Mettre à jour le transfert global',
+        ],
+    ],
+    'transfer' => [
+    'actions' => [
+        'add' => 'Ajouter un nouveau virement',
+        'update' => "Mettre à jour le virement de :name",
+    ],
+],
 ];

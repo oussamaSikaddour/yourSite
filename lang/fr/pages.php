@@ -88,16 +88,16 @@ return [
             "main" => "Gérer les travaux sociaux"
         ]
     ],
-    "wilaya" => [
+    "wilayates" => [
         'name' => "Wilayas",
         "titles" => [
             "main" => "Gestion des wilayas"
         ]
     ],
-    "dairates" => [
-        'name' => "Dairas",
+    "wilaya" => [
+        'name' => ":name",
         "titles" => [
-            "main" => "Gestion des dairas (Code wilaya: :code)"
+            "main" => "Administration des daïras de la wilaya :name"
         ]
     ],
     "occupation_fields" => [
@@ -161,7 +161,7 @@ return [
     ],
 
     'menu' => [
-        'name' => 'Gérer le menu',
+        'name' => ':title',
         'titles' => [
             'main' => 'Gérer les liens externes du menu :title',
         ],
@@ -235,6 +235,11 @@ return [
         ]
     ],
 
+    "news" => [
+        "name" => "Actualités",
+        'title' => "Bienvenue sur la page des actualités",
+    ],
+
     "services_public" => [
         "name" => "Nos départements",
         'title' => "Nos départements",
@@ -267,12 +272,7 @@ return [
             'main' => 'Gérer les bonus',
         ],
     ],
-    'global_transfers' => [
-        'name' => 'Gérer les transferts globaux',
-        'titles' => [
-            'main' => 'Gérer les transferts globaux',
-        ],
-    ],
+
     'global_transfer_details' => [
         'name' => 'Détails du transfert global',
         'titles' => [

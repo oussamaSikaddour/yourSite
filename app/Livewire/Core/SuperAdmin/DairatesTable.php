@@ -24,7 +24,7 @@ class DairatesTable extends Component
     public $designation = "";
     #[Url()]
     public $code = "";
-    public $wilayaCode;
+    public $wilayaName;
     public $local = "fr";
     public $wilayaId;
 

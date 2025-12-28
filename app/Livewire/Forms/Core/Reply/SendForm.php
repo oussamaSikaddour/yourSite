@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Forms\Core\Reply;
 
-use App\Events\Default\ReplyEvent;
+use App\Events\Core\ReplyEvent;
 use App\Traits\Core\Web\ResponseTrait;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
@@ -47,10 +47,11 @@ class SendForm extends Form
         try {
             $data = $this->validate();
 
+
          $data["name"]=$this->name;
          $data["email"]=$this->email;
         event(new ReplyEvent($data));
-        return $this->response(true,message:__('modals.reply.success'));
+        return $this->response(true,message:__('forms.reply.responses.send_success'));
      } catch (\Illuminate\Validation\ValidationException $e) {
         // Return all validation errors
         return $this->response(false, errors: $e->validator->errors()->all());

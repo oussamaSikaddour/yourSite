@@ -11,7 +11,7 @@ class BankTransfer extends Model
 
     protected $fillable = [
         "amount",
-        "user_id",
+        "person_id",
         "global_bank_transfer_id",
     ];
 
@@ -28,7 +28,7 @@ class BankTransfer extends Model
      */
     public function beneficiary()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Person::class);
     }
 
     /**

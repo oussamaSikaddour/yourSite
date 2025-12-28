@@ -42,7 +42,7 @@
 
     @if (isset($this->menus) && $this->menus->isNotEmpty())
         <div class="table__body">
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="column">
@@ -70,7 +70,7 @@
                                     :parameters="[$menu]" rounded=true hasTooltip=true :tooltip="__('toolTips.menu.delete')" />
 
 
-                                <livewire:core.open-modal-button wire:key="edit-Me-{{ $wilaya->id }}" rounded=true
+                                <livewire:core.open-modal-button wire:key="edit-Me-{{ $menu->id }}" rounded=true
                                     hasTooltip=true icon="edit" :tooltip="__('toolTips.menu.update')"
                                     modalTitle="modals.menu.actions.update" :modalContent="[
                                         'name' => 'core.admin.menu-modal',
@@ -79,11 +79,11 @@
 
                                 <x-core.button icon="view" variant="info" route="menu_route" :routeParameters="[
                                     'id' => $menu->id,
-                                    'title' => $menu->localized_title,
+                                    'title' => $menu->title,
                                 ]"
-                                    rounded=true hasTooltip=true :tooltip="__('toolTips.meun.manage')" />
+                                    rounded=true hasTooltip=true :tooltip="__('toolTips.menu.manage')" />
                             </td>
-                            <td scope="row">{{ $menu->localized_title }}</td>
+                            <td scope="row">{{ $menu->title }}</td>
                             <td>
                                 <livewire:core.table-selector wire:key="st-P-{{ $menu->id }}" :data="$stateOptions"
                                     :selectedValue="$menu->state" :entity="$menu" lazy />

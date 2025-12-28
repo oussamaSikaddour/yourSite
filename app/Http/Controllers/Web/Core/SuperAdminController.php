@@ -69,11 +69,19 @@ class SuperAdminController extends Controller
         $parameters = $request->query(); // Get all query parameters
 
         // Check for required slider parameters
-        if (array_key_exists('id', $parameters) && array_key_exists('code', $parameters)) {
+        if (array_key_exists('id', $parameters) && array_key_exists('name', $parameters)) {
             // Generate localized title using slider name
             $title = __("pages.wilaya.name", [
-                "code" => $parameters['code'],
+                "name" => $parameters['name'],
             ]);
+
+
+            $breadcrumbLinks = [
+
+                ['route' => 'wilayates', 'label' => __('pages.wilayates.name')],
+                ['route' => 'wilaya', 'label' => __('pages.wilaya.name',['name'=>$parameters['name']])],
+
+            ];
             // Modal configuration for adding a slide to the slider
             $modalTitle = "modals.daira.actions.add";
             $modalContent = [
@@ -84,7 +92,7 @@ class SuperAdminController extends Controller
             ];
 
             // Return the slides view with editor and modal config
-            return view('pages.core.super-admin.wilaya', compact('title', 'modalTitle', 'modalContent', 'parameters'));
+            return view('pages.core.super-admin.wilaya', compact('title', 'modalTitle', 'modalContent', 'parameters','breadcrumbLinks'));
         }
     }
 
@@ -145,14 +153,14 @@ class SuperAdminController extends Controller
     public function showManageHeroScene(): View
     {
 
-                $breadcrumbLinks = [
+        $breadcrumbLinks = [
 
             ['route' => 'dashboard', 'label' => __('pages.dashboard.name')],
             ['route' => 'manage_hero', 'label' => __('pages.manage_hero.name')],
 
         ];
         $title = __("pages.manage_hero.name"); // Localized hero section title
-        return view('pages.core.super-admin.manage-section-hero', compact('title' ,'breadcrumbLinks'));
+        return view('pages.core.super-admin.manage-section-hero', compact('title', 'breadcrumbLinks'));
     }
 
     /**
@@ -163,14 +171,14 @@ class SuperAdminController extends Controller
     public function showManageAboutUsScene(): View
     {
 
-                $breadcrumbLinks = [
+        $breadcrumbLinks = [
 
             ['route' => 'dashboard', 'label' => __('pages.dashboard.name')],
             ['route' => 'manage_about_us', 'label' => __('pages.manage_about_us.name')],
 
         ];
         $title = __("pages.manage_about_us.name"); // Localized about-us section title
-        return view('pages.core.super-admin.manage-section-about-us', compact('title' ,'breadcrumbLinks'));
+        return view('pages.core.super-admin.manage-section-about-us', compact('title', 'breadcrumbLinks'));
     }
 
     /**
@@ -189,12 +197,12 @@ class SuperAdminController extends Controller
             "parameters" => [],
         ];
 
-                $breadcrumbLinks = [
+        $breadcrumbLinks = [
 
             ['route' => 'dashboard', 'label' => __('pages.dashboard.name')],
             ['route' => 'manage_our_qualities', 'label' => __('pages.manage_our_qualities.name')],
 
         ];
-        return view('pages.core.super-admin.our-qualities', compact('title', 'modalTitle', 'modalContent','breadcrumbLinks'));
+        return view('pages.core.super-admin.our-qualities', compact('title', 'modalTitle', 'modalContent', 'breadcrumbLinks'));
     }
 }

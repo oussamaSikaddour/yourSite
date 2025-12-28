@@ -73,10 +73,7 @@ class GlobalTransfersTable extends Component
             default => 'motive_fr',
         };
 
-        $this->initiatorColumn = match ($this->locale) {
-            'ar' => 'name_ar',
-            default => 'name_fr',
-        };
+
 
         $query = GlobalBankTransfer::query()
             ->with('theInitiator')
@@ -102,7 +99,7 @@ class GlobalTransfersTable extends Component
         } elseif (!empty($this->date_max)) {
             $query->whereDate('date', '<=', $this->date_max);
         }
-        return $query->select('global_bank_transfers.*', "users.{$this->initiatorColumn} as initiator")
+        return $query->select('global_bank_transfers.*', "users.name as initiator")
                      ->orderBy($this->sortBy, $this->sortDirection)
                      ->paginate($this->perPage);
     }

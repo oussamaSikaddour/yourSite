@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('bank_transfers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
+            $table->foreignId('person_id')
+                ->constrained('persons')
                 ->onDelete('cascade');
             $table->foreignId('global_bank_transfer_id')
                 ->constrained()

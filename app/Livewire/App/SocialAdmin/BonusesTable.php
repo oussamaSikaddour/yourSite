@@ -21,9 +21,9 @@ class BonusesTable extends Component
     public $titled;
     #[Url()]
     public $amount;
-    public $simplisticView=false;
-    public $selectedBonuses=[];
-    public $oldSelectedBonuses=[];
+    public $simplisticView = false;
+    public $selectedBonuses = [];
+    public $oldSelectedBonuses = [];
 
     protected array $filterable = ['titled', 'amount'];
     protected array $validationRules = [
@@ -40,8 +40,8 @@ class BonusesTable extends Component
      */
     public function resetFilters()
     {
-        $this->amount="";
-        $this->titled="";
+        $this->amount = "";
+        $this->titled = "";
         $this->resetPage();
     }
 
@@ -64,7 +64,7 @@ class BonusesTable extends Component
         }
         $query->where('amount', 'like', "%{$this->amount}%");
         return $query->orderBy($this->sortBy, $this->sortDirection)
-                     ->paginate($this->perPage);
+            ->paginate($this->perPage);
     }
 
 
@@ -73,7 +73,7 @@ class BonusesTable extends Component
      * Delete an OurQuality entity and its associated images.
      */
     #[On("delete-bonus")]
-    public function deleteBonus( bonus $bonus)
+    public function deleteBonus(bonus $bonus)
     {
         try {
             $bonus->delete();
@@ -88,43 +88,43 @@ class BonusesTable extends Component
      */
 
 
-    public function openDeleteDialog($bonus){
+    public function openDeleteDialog($bonus)
+    {
 
         $locale = app()->getLocale();
-        $name=$bonus["name_$locale"] ?? $bonus['name_fr'] ?? '';
-        $data=[
+        $name = $bonus["name_$locale"] ?? $bonus['name_fr'] ?? '';
+        $data = [
             "question" => "dialogs.title.bonus",
-            "details" =>["bonus",$name],
-            "actionEvent"=>[
-                            "event"=>"delete-bonus",
-                            "parameters"=>$bonus
-                            ]
-            ];
+            "details" => ["bonus", $name],
+            "actionEvent" => [
+                "event" => "delete-bonus",
+                "parameters" => $bonus
+            ]
+        ];
 
-    $this->dispatch("open-dialog", $data);
+        $this->dispatch("open-dialog", $data);
     }
 
 
     public function updated(string $property): void
-{
+    {
 
-    if ($property  && $this->selectedBonuses != $this->oldSelectedBonuses) {
-        $this->oldSelectedBonuses = $this->selectedBonuses;
+        if ($property  && $this->selectedBonuses != $this->oldSelectedBonuses) {
+            $this->oldSelectedBonuses = $this->selectedBonuses;
 
-        $this->dispatch("selected-bonuses",$this->selectedBonuses);
-
-    }
-    if (in_array($property, $this->filterable) || $property === 'perPage') {
-        $this->resetPage();
-    }
-    if (array_key_exists($property, $this->validationRules)) {
-        try {
-            $this->validateOnly($property, $this->validationRules);
-        } catch (ValidationException $e) {
-            $this->dispatch('open-errors', $e->validator->errors()->all());
+            $this->dispatch("selected-bonuses", $this->selectedBonuses);
+        }
+        if (in_array($property, $this->filterable) || $property === 'perPage') {
+            $this->resetPage();
+        }
+        if (array_key_exists($property, $this->validationRules)) {
+            try {
+                $this->validateOnly($property, $this->validationRules);
+            } catch (ValidationException $e) {
+                $this->dispatch('open-errors', $e->validator->errors()->all());
+            }
         }
     }
-}
     public function render()
     {
         return view('livewire.app.social-admin.bonuses-table');

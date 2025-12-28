@@ -45,7 +45,7 @@
 
 
         <div class="table__body">
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="column">
@@ -82,9 +82,14 @@
 
                                 <x-core.button variant="danger" icon="delete" function="openDeleteDialog"
                                     :parameters="[$gb]" rounded=true hasTooltip=true :tooltip="__('toolTips.global_transfer.delete')" />
-                                <livewire:core.open-modal-button wire:key="edit-GB-{{ $global_transfer->id }}"
-                                    rounded=true hasTooltip=true icon="edit" :tooltip="__('toolTips.global_transfer.update')"
-                                    modalTitle="modals.global_transfer.actions.update" :modalContent="[
+                                <livewire:core.open-modal-button
+                                   wire:key="edit-GB-{{ $gb->id }}"
+                                    rounded=true
+                                    hasTooltip=true
+                                    icon="edit"
+                                    :tooltip="__('toolTips.global_transfer.update')"
+                                    modalTitle="modals.global_transfer.actions.update"
+                                    :modalContent="[
                                         'name' => 'app.social-admin.global-transfer-modal',
                                         'parameters' => ['id' => $gb->id],
                                     ]" />
@@ -100,7 +105,7 @@
                             <td>{{ $gb->date }}</td>
                             <td>{{ $gb->reference }}</td>
                             <td>{{ $gb->total_amount }}</td>
-                            <td>{{ $gb->localized_motive }}</td>
+                            <td>{{ $gb->motive }}</td>
                             <td>{{ $gb->initiator }}</td>
                             <td>{{ $gb->created_at->format('Y-m-d') }}</td>
 
@@ -110,7 +115,7 @@
 
             </table>
         </div>
-        {{ $this->globalTransfers->links('components.default.pagination') }}
+        {{ $this->globalTransfers->links('components.core.pagination') }}
     @else
         <div class="table__footer">
             <h2>

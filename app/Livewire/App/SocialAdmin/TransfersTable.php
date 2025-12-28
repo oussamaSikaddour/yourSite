@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Livewire\Default\SocialAdmin;
+namespace App\Livewire\App\SocialAdmin;
 
 use App\Models\Bank;
 use App\Models\BankingInformation;
 use App\Models\BankTransfer;
 use App\Models\GeneralSetting;
 use App\Models\GlobalBankTransfer;
+use App\Models\Person;
 use App\Models\User;
 use App\Traits\App\Common\AppTrait;
 use App\Traits\Core\Common\GeneralTrait;
@@ -14,6 +15,7 @@ use App\Traits\Core\Common\TableTrait;
 use App\Traits\Core\Common\TextAndPdfTrait;
 use App\Traits\Core\Web\ResponseTrait;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
@@ -58,29 +60,59 @@ class TransfersTable extends Component
         return Bank::get(['id', 'acronym']);
     }
 
-    public function prepareTransfers()
-    {
-        $query = BankTransfer::query()
-            ->leftJoin('users', 'bank_transfers.user_id', '=', 'users.id')
-            ->leftJoin('banking_information', function ($join) {
-                $join->on('users.id', '=', 'banking_information.bankable_id')
-                    ->where('banking_information.bankable_type', User::class)
-                    ->where('banking_information.is_active', true);
-            })
-            ->leftJoin('banks', 'banking_information.bank_id', '=', 'banks.id')
-            ->when($this->fullName, fn($q) => $q->where('users.name_fr', 'like', "%{$this->fullName}%"))
-            ->when($this->account, fn($q) => $q->where('banking_information.account_number', 'like', "%{$this->account}%"))
-            ->when($this->bank, fn($q) => $q->where('banks.id', $this->bank))
-            ->where('bank_transfers.global_bank_transfer_id', $this->globalTransferId)
-            ->select(
-                'bank_transfers.*',
-                'users.name_fr as beneficiary',
-                'banking_information.account_number as account',
-                'banks.acronym as bank'
-            );
 
-        return $query;
-    }
+public function prepareTransfers()
+{
+    // Detect Arabic input if any
+    $isArabic = $this->fullName && preg_match('/\p{Arabic}/u', $this->fullName);
+
+    // Resolve locale
+    $local = $this->local === 'ar' ? 'ar' : 'fr';
+
+    // Choose name columns
+    $lastNameColumn  = $isArabic ? 'last_name_ar'  : "last_name_{$local}";
+    $firstNameColumn = $isArabic ? 'first_name_ar' : "first_name_{$local}";
+
+    // CONCAT for search
+    $fullNameExpression = DB::raw("CONCAT($lastNameColumn, ' ', $firstNameColumn)");
+
+    $query = BankTransfer::query()
+        ->leftJoin('persons', 'bank_transfers.person_id', '=', 'persons.id')
+        ->leftJoin('banking_information', function ($join) {
+            $join->on('persons.id', '=', 'banking_information.bankable_id')
+                ->where('banking_information.bankable_type', Person::class)
+                ->where('banking_information.is_active', true);
+        })
+        ->leftJoin('banks', 'banking_information.bank_id', '=', 'banks.id')
+
+        // Full name filter
+        ->when($this->fullName, function ($q) use ($fullNameExpression) {
+            $q->where($fullNameExpression, 'like', '%' . $this->fullName . '%');
+        })
+
+        // Account filter
+        ->when($this->account, fn($q) =>
+            $q->where('banking_information.account_number', 'like', '%' . $this->account . '%')
+        )
+
+        // Bank filter
+        ->when($this->bank, fn($q) =>
+            $q->where('banks.id', $this->bank)
+        )
+
+        ->where('bank_transfers.global_bank_transfer_id', $this->globalTransferId)
+
+        ->select(
+            'bank_transfers.*',
+            // Beneficiary shown according to locale
+            DB::raw("CONCAT($lastNameColumn, ' ', $firstNameColumn) as beneficiary"),
+            'banking_information.account_number as account',
+            'banks.acronym as bank'
+        );
+
+    return $query;
+}
+
 
     #[Computed]
     public function transfers()
@@ -266,7 +298,7 @@ class TransfersTable extends Component
     public function updated(string $property): void
     {
         if ($property === "excelFile") {
-            $errorsFileData = $this->whenExcelFileUploaded("TransfersImport", __('tables.transfers.excel.upload-success'), parameters: [$this->globalTransferId]);
+            $errorsFileData = $this->whenExcelFileUploaded("App\TransfersImport", __('tables.transfers.excel.upload-success'), parameters: [$this->globalTransferId]);
             if (is_array($errorsFileData)) {
                 $this->dispatch('errors-file-data', errorsFileData: $errorsFileData);
             }
@@ -287,7 +319,7 @@ class TransfersTable extends Component
 
     public function render()
     {
-        return view('livewire.default.social-admin.transfers-table');
+        return view('livewire.app.social-admin.transfers-table');
     }
 
     private function generateHeader()

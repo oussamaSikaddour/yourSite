@@ -66,7 +66,8 @@
                                 icon="delete"
                                 function="openDeleteDialog"
                                 :parameters="[$bank]"
-                                rounded=true hasTooltip=true
+                                rounded=true
+                                hasTooltip=true
                                 :tooltip="__('toolTips.bank.delete')"
                                 />
 

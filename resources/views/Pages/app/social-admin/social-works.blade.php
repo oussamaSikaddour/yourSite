@@ -11,7 +11,7 @@
 
                 <div class="column ">
 
-                    <livewire:core.open-modal-button :text="__('modals.user.actions.add')" variant="primary" icon="add" :modalTitle="$modalTitle3"
+                    <livewire:core.open-modal-button :text="__('modals.person.actions.add')" variant="primary" icon="add" :modalTitle="$modalTitle3"
                         :modalContent="$modalContent3" :modalTitleOptions="$modalTitleOptions3" />
 
 
@@ -35,6 +35,6 @@
 
     </div>
 
-    <livewire:core.users-table />
+    <livewire:core.persons-table />
     <livewire:app.social-admin.global-transfers-table />
 @endsection

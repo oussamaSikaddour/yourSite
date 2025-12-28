@@ -16,6 +16,7 @@ enum RoutesNames: string
     case SET_LANG = 'setLang';                    // Route for changing language
     case SERVICE_DETAILS_PUBLIC = 'servicePublic';
     case SERVICES_PUBLIC = "servicesPublic";
+    case NEWS_ROUTE ='news';
 
         // Authentication Routes
     case LOGIN = 'login';                         // Login page
@@ -67,6 +68,5 @@ enum RoutesNames: string
     case  SOCIAL_WORKS_ROUTE = "socialWorks";
     case  ESTABLISHMENT_BANKING_INFO_ROUTE = "establishmentsBankingInfo";
     case  BONUSES_ROUTE = "bonuses";
-    case  GLOBAL_TRANSFERS_ROUTE = "globalTransfers";
     case  GLOBAL_TRANSFERS_DETAILS_ROUTE = "globalTransfersDetails";
 }

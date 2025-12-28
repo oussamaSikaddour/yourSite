@@ -9,6 +9,18 @@ use App\Models\Service; // Make sure you have a Service model
 
 class GuestController extends Controller
 {
+
+    public function showNewsPage(): View
+    {
+
+        $breadcrumbLinks = [
+            ['route' => 'index',      'label' => __('pages.landing_page.name')],
+            ['route' => 'news', 'label' => __('pages.news.name')]
+        ];
+
+        $title = __('pages.news.name');
+        return view('pages.app.news', compact('title', 'breadcrumbLinks'));
+    }
     public function showServiceDetailsPage(Request $request): View
     {
         $serviceId = $request->query('id');

@@ -90,16 +90,16 @@ return [
 
 
 
-    "wilaya" => [
+    "wilayates" => [
         'name' => "States",
         "titles" => [
             "main" => "State Management"
         ]
     ],
-    "dairates" => [
-        'name' => "Districts",
+    "wilaya" => [
+        'name' => ":name",
         "titles" => [
-            "main" => "District Management (State Code: :code)"
+            "main" => "manage The States :name  districts"
         ]
     ],
     "occupation_fields" => [
@@ -163,7 +163,7 @@ return [
     ],
 
     'menu' => [
-        'name' => 'Manage Menu',
+        'name' => ':title',
         'titles' => [
             'main' => 'Manage External Links of Menu :title',
         ],
@@ -238,6 +238,10 @@ return [
         ]
     ],
 
+    "news"=>[
+        "name"=>"News",
+        'title'=>"Welcome to the News page",
+    ],
     "services_public"=>[
         "name"=>"Our Services",
         'title'=>"Our Services",
@@ -268,12 +272,6 @@ return [
         'name' => 'Manage Bonuses',
         'titles' => [
             'main' => 'Manage Bonuses',
-        ],
-    ],
-    'global_transfers' => [
-        'name' => 'Manage Global Transfers',
-        'titles' => [
-            'main' => 'Manage Global Transfers',
         ],
     ],
     'global_transfer_details' => [

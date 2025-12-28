@@ -3720,8 +3720,7 @@ svg {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--clr-light);
-  border: var(--border);
+  background-color: rgba(233, 234, 244, 0.4);
   border-radius: var(--br);
   width: -moz-fit-content;
   width: fit-content;
@@ -3739,7 +3738,7 @@ svg {
   align-items: center;
   justify-content: space-between;
   min-width: 10rem;
-  background-color: inherit;
+  background-color: transparent;
   min-height: 3rem;
   gap: 1rem;
   padding: 0.5rem 1rem;
@@ -3747,14 +3746,6 @@ svg {
 .breadcrumb ol li:hover a {
   color: rgb(4.4418604651, 69.9593023256, 91.0581395349);
   font-weight: bold;
-}
-.breadcrumb ol li:first-of-type {
-  border-top-left-radius: var(--br);
-  border-bottom-left-radius: var(--br);
-}
-.breadcrumb ol li:last-of-type {
-  border-top-right-radius: var(--br);
-  border-bottom-right-radius: var(--br);
 }
 .breadcrumb ol li:last-of-type .breadcrumb__icon {
   display: none;

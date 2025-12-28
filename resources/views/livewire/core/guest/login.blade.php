@@ -19,6 +19,6 @@
                 fullWidth=true />
             <x-core.button href="{{ route($this->registerPageRoute) }}" :text="__('pages.login.links.register')" />
 
-            < </div>
         </div>
+    </div>
 </form>

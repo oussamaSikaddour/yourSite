@@ -142,7 +142,7 @@ public function services()
     public function updated(string $property): void
     {
         if ($property === 'excelFile') {
-            $errors = $this->whenExcelFileUploaded('App\servicesImport', __('tables.services.excel.upload.success'));
+            $errors = $this->whenExcelFileUploaded('App\ServicesImport', __('tables.services.excel.upload.success'));
             if (is_array($errors)) {
                 $this->dispatch('errors-file-data', errorsFileData: $errors);
             }

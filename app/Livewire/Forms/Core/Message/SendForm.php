@@ -5,7 +5,6 @@ namespace App\Livewire\Forms\Core\Message;
 use App\Enum\Core\NotificationFor;
 use App\Models\Message;
 use App\Models\Notification;
-use App\Models\User;
 use App\Traits\Core\Web\ResponseTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -59,7 +58,7 @@ class SendForm extends Form
                 Notification::create([
                     'message'           => 'new',
                     'active'            => true,
-                    'for_type'          => NotificationFor::ADMIN,   // <-- enum
+                    'for_type'          => NotificationFor::ADMIN->value,   // <-- enum
                     'targetable_type'   =>Message::class,
                 ]);
 

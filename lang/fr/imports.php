@@ -18,9 +18,16 @@ return [
 
     "banking_information" => [
         "exist" => "Le numéro de compte existe déjà",
+
         'employee' => [
+            "account-inactive-or-missing" => "Le compte :account est soit inactif, soit l'employé n'a pas encore été ajouté",
             'name-mismatch' => 'Le nom de l\'employé ne correspond pas aux enregistrements. Fourni : ":provided", Attendu : ":expected".',
         ],
+        "last_name" => "Nom de famille",
+        "first_name" => "Prénom",
+        "bank" => "Banque",
+        "account" => "Compte bancaire",
+        "amount" => "Montant"
     ],
     'municipalities' => [
         'code' => "Code de la commune",
@@ -64,19 +71,19 @@ return [
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////               App
 
-'services' => [
-    "specialty_not_found" => "La spécialité saisie n'est pas trouvée dans notre base de données. Veuillez vérifier l'orthographe et réessayer.",
-    "name_fr" => "Nom du département (Français)",
-    "name_en" => "Nom du département (Anglais)",
-    "name_ar" => "Nom du département (Arabe)",
-    "tel" => "Téléphone principal",
-    "fax" => "Fax",
-    "head_service" => "Chef de département",
-    "specialty" => "Spécialité médicale",
-    'email' => "Email",
-    'beds_number' => "Nombre de lits",
-    'specialists_number' => "Nombre de spécialistes",
-    'physicians_number' => "Nombre de médecins",
-    'paramedics_number' => "Nombre de paramédicaux",
-],
+    'services' => [
+        "specialty_not_found" => "La spécialité saisie n'est pas trouvée dans notre base de données. Veuillez vérifier l'orthographe et réessayer.",
+        "name_fr" => "Nom du département (Français)",
+        "name_en" => "Nom du département (Anglais)",
+        "name_ar" => "Nom du département (Arabe)",
+        "tel" => "Téléphone principal",
+        "fax" => "Fax",
+        "head_service" => "Chef de département",
+        "specialty" => "Spécialité médicale",
+        'email' => "Email",
+        'beds_number' => "Nombre de lits",
+        'specialists_number' => "Nombre de spécialistes",
+        'physicians_number' => "Nombre de médecins",
+        'paramedics_number' => "Nombre de paramédicaux",
+    ],
 ];

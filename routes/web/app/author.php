@@ -16,4 +16,5 @@ Route::group([
     Route::get('/service', [AuthorController::class, 'showServicePage'])
         ->name(RoutesNames::SERVICE_ROUTE->value);
 
+
 });

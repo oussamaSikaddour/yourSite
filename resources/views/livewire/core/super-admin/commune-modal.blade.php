@@ -42,7 +42,7 @@
           <!-- Table Section -->
           <div class="table__container" x-on:update-communes-table.window="$wire.$refresh()">
               <div class="table__header">
-                  <h3>@lang('tables.communes.info', ['code' => $dairaCode])</h3>
+                  <h3>@lang('tables.communes.info', ['name' => $dairaName])</h3>
 
 
                   <div class="table__header__actions">

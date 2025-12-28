@@ -35,7 +35,7 @@ class AdminController extends Controller
     }
     public function showManageUsersPage(): View
     {
-        $title = __("pages.users.name"); // Localized dashboard title
+        $title = __("pages.manage_users.name"); // Localized dashboard title
 
         // Modal configuration to add a user
         $modalTitle = "modals.user.actions.add";
@@ -71,6 +71,7 @@ class AdminController extends Controller
             "parameters" => [],
         ];
 
+
         // Return the menus admin view
         return view('pages.core.admin.menus', compact('title', 'modalTitle', 'modalContent'));
     }
@@ -101,8 +102,15 @@ class AdminController extends Controller
                 ],
             ];
 
+            $breadcrumbLinks = [
+
+                ['route' => 'menus_route', 'label' => __('pages.menus.name')],
+                ['route' => 'menu_route', 'label' => __('pages.menu.name',['title'=>$parameters['title']])],
+
+            ];
+
             // Return the specific menu view with dynamic data
-            return view('pages.core.admin.menu', compact('title', 'modalTitle', 'modalContent', 'parameters'));
+            return view('pages.core.admin.menu', compact('title', 'modalTitle', 'modalContent', 'parameters','breadcrumbLinks'));
         }
     }
 }

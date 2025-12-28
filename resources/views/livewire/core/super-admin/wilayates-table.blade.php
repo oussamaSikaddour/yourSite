@@ -29,21 +29,11 @@
             <form class="form">
 
                 <div class="row">
-                            <x-core.form.input
-            model="designation"
-            :label="__('tables.wilayates.designation')"
-            type="text"
-            html_id="FTDesignation"
-            role="filter"
-        />
+                    <x-core.form.input model="designation" :label="__('tables.wilayates.designation')" type="text" html_id="FTDesignation"
+                        role="filter" />
 
-        <x-core.form.input
-            model="code"
-            :label="__('tables.wilayates.code')"
-            type="text"
-            html_id="FTCode"
-            role="filter"
-        />
+                    <x-core.form.input model="code" :label="__('tables.wilayates.code')" type="text" html_id="FTCode"
+                        role="filter" />
                 </div>
 
                 <div class="form__actions">
@@ -89,17 +79,12 @@
 
                                 <livewire:core.open-modal-button wire:key="edit-w-{{ $wilaya->id }}" rounded=true
                                     hasTooltip=true :tooltip="__('toolTips.wilaya.update')" icon="edit"
-                                    modalTitle="modals.wilaya.actions.update" :modalTitleOptions="['code' => $wilaya->code]"
-                                    :modalContent="[
+                                    modalTitle="modals.wilaya.actions.update" :modalTitleOptions="['name' => $wilaya->localized_designation]" :modalContent="[
                                         'name' => 'core.super-admin.wilaya-modal',
                                         'parameters' => ['id' => $wilaya->id],
                                     ]" />
 
-                                <x-core.button
-                                icon="view"
-                                 variant="info"
-                                  route="wilaya"
-                                  :routeParameters="['id' => $wilaya->id, 'code' => $wilaya->code]"
+                                <x-core.button icon="view" variant="info" route="wilaya" :routeParameters="['id' => $wilaya->id, 'name' => $wilaya->localized_designation]"
                                     rounded=true hasTooltip=true :tooltip="__('toolTips.wilaya.manage.view')" />
 
                             </td>
@@ -121,6 +106,3 @@
         </div>
     @endif
 </div>
-
-
-

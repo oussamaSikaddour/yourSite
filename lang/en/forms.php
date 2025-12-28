@@ -134,7 +134,7 @@ return [
         ],
     ],
     'general_infos' => [
-        'inaugural_year'=>"Inaugural Year",
+        'inaugural_year' => "Inaugural Year",
         'email' => "Email Address",
         'app_name' => "Application Name",
         'acronym' => "Institution Acronym",
@@ -188,19 +188,19 @@ return [
     ],
     'manage_about_us' => [
 
-        "sub_title_fr"=>"sub_title (Fr)",
-        "sub_title_ar"=>"sub_title (Ar)",
-        "sub_title_en"=>"sub_title (En)",
+        "sub_title_fr" => "sub_title (Fr)",
+        "sub_title_ar" => "sub_title (Ar)",
+        "sub_title_en" => "sub_title (En)",
 
-         'first_paragraph_fr'=>"First Paragraph (Fr)",
-         'first_paragraph_ar'=>"First Paragraph (Ar)",
-         'first_paragraph_en'=>"First Paragraph (En)",
-         'second_paragraph_fr'=>"Second Paragraph (Fr)",
-         'second_paragraph_ar'=>"Second Paragraph (Ar)",
-         'second_paragraph_en'=>"Second Paragraph (En)",
-         'third_paragraph_fr'=>"Third Paragraph (Fr)",
-         'third_paragraph_ar'=>"Third Paragraph (Ar)",
-         'third_paragraph_en'=>"Third Paragraph (En)",
+        'first_paragraph_fr' => "First Paragraph (Fr)",
+        'first_paragraph_ar' => "First Paragraph (Ar)",
+        'first_paragraph_en' => "First Paragraph (En)",
+        'second_paragraph_fr' => "Second Paragraph (Fr)",
+        'second_paragraph_ar' => "Second Paragraph (Ar)",
+        'second_paragraph_en' => "Second Paragraph (En)",
+        'third_paragraph_fr' => "Third Paragraph (Fr)",
+        'third_paragraph_ar' => "Third Paragraph (Ar)",
+        'third_paragraph_en' => "Third Paragraph (En)",
 
         "image" => "About Us Section Image",
 
@@ -398,10 +398,17 @@ return [
             'email-placeholder' => "Your Email",
             "message" => "Message",
             'message-placeholder' => "Your Message",
+            "sent" => "Send a message",
             'responses' => [
                 'send_success' => 'Your message has been successfully sent. A reply will be sent to your email address',
             ],
         ]
+    ],
+    "reply" => [
+        "message" => "Message",
+        'responses' => [
+            'send_success' => 'Your reply has been successfully sent to the visitor via email.',
+        ],
     ],
     "article" => [
         'title_fr' => "Title In French",
@@ -506,24 +513,24 @@ return [
         ],
     ],
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////               App
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////               App
 
 
     'service' => [
         "name_fr" => "Service Name (Fr)",
         "name_ar" => "Service Name (Ar)",
         "name_en" => "Service Name (En)",
-         "introduction_fr"=>"Introduction (Fr)",
-         "introduction_ar"=>"Introduction (Ar)",
-         "introduction_en"=>"Introduction (En)",
+        "introduction_fr" => "Introduction (Fr)",
+        "introduction_ar" => "Introduction (Ar)",
+        "introduction_en" => "Introduction (En)",
         "specialty" => "Medical Specialty",
         "tel" => "Primary Phone",
         "fax" => "Fax",
-        'email'=> "Email",
-        'beds_number' =>"Beds Number",
-        'specialists_number'=> "Specialist Number",
-        'physicians_number'=> "Physicians Number",
-        'paramedics_number'=> "Paramedics Number",
+        'email' => "Email",
+        'beds_number' => "Beds Number",
+        'specialists_number' => "Specialist Number",
+        'physicians_number' => "Physicians Number",
+        'paramedics_number' => "Paramedics Number",
         "head_of_service_id" => "Head of Service",
         "establishment_id" => "Affiliated Establishment",
 

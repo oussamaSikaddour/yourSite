@@ -18,9 +18,16 @@ return [
 
     "banking_information" => [
         "exist" => "رقم الحساب موجود بالفعل",
+
         'employee' => [
+            "account-inactive-or-missing" => "الحساب :account إما غير نشط أو أن الموظف لم يتم إضافته بعد",
             'name-mismatch' => 'اسم الموظف لا يتطابق مع السجلات. المقدّم: ":provided"، المتوقع: ":expected".',
         ],
+        "last_name" => "اسم العائلة",
+        "first_name" => "الاسم الأول",
+        "bank" => "البنك",
+        "account" => "الحساب البنكي",
+        "amount" => "المبلغ"
     ],
     'municipalities' => [
         'code' => "رمز البلدية",

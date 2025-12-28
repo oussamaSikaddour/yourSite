@@ -111,7 +111,7 @@ return [
         ]
     ],
     'dairates' => [
-        "info" => "Districts of State (Code: :code)",
+        "info" => ":name 's Districts ",
         "not_found" => "No districts currently available",
         "code" => "District Code",
         "designation" => "District Name",
@@ -126,17 +126,17 @@ return [
         ]
     ],
     'communes' => [
-        "info" => "Municipalities of District (Code: :code)",
-        "not_found" => "No municipalities currently available",
-        "code" => "Municipality Code",
-        "designation" => "Municipality Name",
+        "info" => ":name 's communes ",
+        "not_found" => "No communes currently available",
+        "code" => "commune Code",
+        "designation" => "commune Name",
         "designation_fr" => "French Name",
         "designation_ar" => "Arabic Name",
         "designation_en" => "English Name",
         "registration_date" => "Registration Date",
         "excel" => [
             "upload" => [
-                "success" => "Municipalities data imported successfully"
+                "success" => "communes data imported successfully"
             ]
         ]
     ],

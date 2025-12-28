@@ -23,15 +23,14 @@ class MessageModal extends Component
 
         $response = $this->form->save();
         $this->form->reset();
-        if ($response['status']) {
-            $this->toastMessage = $response['message'];
-            $this->showToast = true;
+      if ($response['status']) {
+            $this->dispatch('open-toast', $response['message']);
         } else {
             $this->dispatch('open-errors', $response['errors']);
         }
     }
     public function render()
     {
-        return view('livewire.custom.app.message-modal');
+        return view('livewire.app.guest.message-modal');
     }
 }

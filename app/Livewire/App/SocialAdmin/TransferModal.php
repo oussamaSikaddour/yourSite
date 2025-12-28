@@ -5,6 +5,7 @@ namespace App\Livewire\App\SocialAdmin;
 use App\Livewire\Forms\App\Transfer\AddForm;
 use App\Livewire\Forms\App\Transfer\UpdateForm;
 use App\Models\BankTransfer;
+use App\Models\Person;
 use App\Models\User;
 use App\Traits\Core\Common\GeneralTrait;
 use Illuminate\Support\Facades\Log;
@@ -28,17 +29,22 @@ class TransferModal extends Component
 
 
 
- #[Computed()]
- public function employees()
- {
 
+    #[Computed]
+    public function persons()
+    {
+        $nameLocale = $this->local === 'ar' ? 'ar' : 'fr';
+        $lastNameField = 'last_name_' . $nameLocale;
+        $firstNameField = 'first_name_' . $nameLocale;
 
-    $this->local =app()->getLocale()?? 'fr';
-    return User::where('is_paid', true)
-    ->where('establishment_id', auth()->user()->establishment_id)
-    ->get(['id', 'name_'.$this->local]);
- }
-
+        return Person::query()
+            ->select(['id', $lastNameField, $firstNameField])
+            ->get()
+            ->map(fn($person) => [
+                'id'        => $person->id,
+                'full_name' => trim($person->{$lastNameField} . ' ' . $person->{$firstNameField}),
+            ]);
+    }
 
 
     /**
@@ -46,7 +52,9 @@ class TransferModal extends Component
      */
     public function mount(): void
     {
-        $this->employeeOptions = $this->populateSelectorOption($this->employees(),  'id','name_'.$this->local, __('selectors.default.employees'));
+
+        $this->local= app()->getLocale();
+        $this->employeeOptions = $this->populateSelectorOption($this->persons(),  'id','full_name', __('selectors.default.employees'));
         if ($this->id) {
             $this->form = "updateForm";
         }
@@ -67,7 +75,7 @@ class TransferModal extends Component
                 "global_bank_transfer_id"=>$this->globalTransferId,
                 'id' => $this->id,
                 'amount' => $this->transfer->amount,
-                'user_id' => $this->transfer->user_id,
+                'person_id' => $this->transfer->person_id,
             ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::error('Error in transferModal mount method: ' . $e->getMessage(), [

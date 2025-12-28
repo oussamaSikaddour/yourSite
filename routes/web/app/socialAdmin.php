@@ -12,8 +12,6 @@ Route::group(['middleware' => ['auth', 'maintenance', 'web.account.active', 'can
         ->name(RoutesNames::ESTABLISHMENT_BANKING_INFO_ROUTE->value);
     Route::get('/bonuses', [SocialAdminController::class, 'showBonusesPage'])
         ->name(RoutesNames::BONUSES_ROUTE->value);
-    Route::get('/globalTransfers', [SocialAdminController::class, 'showGlobalTransfersPage'])
-        ->name(RoutesNames::GLOBAL_TRANSFERS_ROUTE->value);
     Route::get('/globalTransfersDetails', [SocialAdminController::class, 'showGlobalTransferDetailsPage'])
         ->name(RoutesNames::GLOBAL_TRANSFERS_DETAILS_ROUTE->value);
 

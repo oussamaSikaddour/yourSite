@@ -9,13 +9,13 @@
 
 
                       <livewire:core.tiny-mce-text-area htmlId="rM-m" contentUpdatedEvent="set-message-content"
-                          wire:key="rM-m" :content="$messageContent" />
+                      wire:key="rM-m" :content="$messageContent" />
                   </div>
                   <div class="form__actions">
 
-                      <div class="form__actions">
+
                           <x-core.button type="submit" variant="primary" :text="__('forms.common.actions.submit')" icon="confirm"
-                              expectLoading=true fullWidth=true />
-                      </div>
+                              expectLoading=true fullWidth=true     :wireTargets="['handleSubmit']"/>
+
               </form>
           </div>

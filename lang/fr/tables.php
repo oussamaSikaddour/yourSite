@@ -94,8 +94,8 @@ return [
         ]
     ],
     'dairates' => [
-        "info" => "Districts de la wilaya (Code: :code)",
-        "not_found" => "Aucun district disponible pour le moment",
+        "info" => "Les daïras de :name",
+        "not_found" => "Aucune daïra disponible pour le moment",
         "code" => "Code de la daïra",
         "designation" => "Nom de la daïra",
         "designation_fr" => "Nom français",
@@ -104,12 +104,12 @@ return [
         "registration_date" => "Date d'enregistrement",
         "excel" => [
             "upload" => [
-                "success" => "Données des districts importées avec succès"
+                "success" => "Données des daïras importées avec succès"
             ]
         ]
     ],
     'communes' => [
-        "info" => "Communes de la daïra (Code: :code)",
+        "info" => "Communes de :name",
         "not_found" => "Aucune commune disponible pour le moment",
         "code" => "Code de la commune",
         "designation" => "Nom de la commune",

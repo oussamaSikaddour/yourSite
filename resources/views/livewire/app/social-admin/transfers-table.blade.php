@@ -6,15 +6,24 @@
             <span wire:loading wire:target="excelFile">
                 <x-core.loading />
             </span>
-            <x-core.file-input icon="upload" :tooltip="__('toolTips.transfer.manage.transfers')" model="excelFile" types="excel" type="icon_only" />
+            <x-core.file-input
+            icon="upload" :tooltip="__('toolTips.transfer.excel.upload')"
+             model="excelFile"
+             types="excel" type="icon_only" />
+
+            <x-core.button hasTooltip=true
+            :tooltip="__('toolTips.transfer.generate')"
+            icon="wallet" function="generateEDI"  rounded='true'/>
 
 
-            <x-core.button hasTooltip=true :tooltip="__('toolTips.transfer.generate')" icon="edi" function="generateEDI" />
 
-
-
-
-            <x-core.button hasTooltip=true :tooltip="__('toolTips.transfer.transfers')" icon="transfer" function="openAddTransfersDialog" />
+            <x-core.button
+            hasTooltip=true
+            :tooltip="__('toolTips.transfer.bonuses')"
+            icon="bonus"
+            function="openAddBonusesDialog"
+            rounded="true"
+            />
 
 
 
@@ -50,7 +59,7 @@
 
 
         <div class="table__body">
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
 
@@ -79,12 +88,13 @@
                                 <x-core.button variant="danger" icon="delete" function="openDeleteDialog"
                                     :parameters="[$tb]" rounded=true hasTooltip=true :tooltip="__('toolTips.transfer.delete')" />
                                 <livewire:core.open-modal-button
-                                   wire:key="edit-transfer-{{ $transfer->id }}"
+                                   wire:key="edit-transfer-{{ $tb->id }}"
                                     rounded=true
                                     hasTooltip=true
                                     :tooltip="__('toolTips.transfer.update')"
                                      icon="edit"
                                     modalTitle="modals.transfer.actions.update"
+                                    :modalTitleOptions="['name'=>$tb->beneficiary]"
                                     :modalContent="[
                                         'name' => 'app.social-admin.transfer-modal',
                                         'parameters' => ['id' => $tb->id],
@@ -103,7 +113,7 @@
 
             </table>
         </div>
-        {{ $this->transfers->links('components.default.pagination') }}
+        {{ $this->transfers->links('components.core.pagination') }}
     @else
         <div class="table__footer">
             <h2>

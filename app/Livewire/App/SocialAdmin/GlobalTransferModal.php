@@ -13,7 +13,7 @@ class GlobalTransferModal extends Component
 
     public AddForm $addForm;
     public UpdateForm $updateForm;
-    public GlobalBankTransfer $GlobalTransfer;
+    public GlobalBankTransfer $globalTransfer ;
     public $id;
     public $form = "addForm";
     public $userId;
@@ -39,7 +39,7 @@ class GlobalTransferModal extends Component
     {
         if ($this->id){
         try {
-            $this->GlobalTransfer = GlobalBankTransfer::findOrFail($this->id);
+            $this->globalTransfer = GlobalBankTransfer::findOrFail($this->id);
 
 
             $this->updateForm->fill([
@@ -48,7 +48,7 @@ class GlobalTransferModal extends Component
                 "date"=>$this->globalTransfer->date,
                  "motive_fr"=>$this->globalTransfer->motive_fr,
                  "motive_ar"=>$this->globalTransfer->motive_ar,
-                 "motive_fr"=>$this->globalTransfer->motive_fr,
+                 "motive_en"=>$this->globalTransfer->motive_en,
             ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::error('Error in GlobalTransferModal mount method: ' . $e->getMessage(), [

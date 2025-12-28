@@ -40,6 +40,7 @@
         @yield('pageContent')
     </main>
     <livewire:app.footer />
+    <livewire:core.toast />
 </body>
 
 </html>

@@ -31,7 +31,7 @@ class CommuneModal extends Component
     public $selectedChoice;
     public $form = "addForm";
     public $locale = "fr";
-    public $dairaCode = "";
+    public $dairaName = "";
 
     public $designation = "";
     public $code = "";
@@ -46,8 +46,10 @@ class CommuneModal extends Component
     public function mount()
     {
         $this->locale = app()->getLocale();
-        $this->dairaCode = $this->daira['code'] ?? '';
+        $this->dairaName = $this->daira['designation_'.$this->locale] ?? '';
         $this->resetForm();
+
+
     }
 
     /** Reset form for adding */

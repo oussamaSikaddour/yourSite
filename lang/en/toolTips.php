@@ -6,6 +6,7 @@ return [
         "resetForm" => "Reset Form",
         "add" => "Add New",
         "update" => "Update",
+        'per_page' => "Par page",
         "previous" => [
             "page" => "Previous Page" // Corrected spelling of "pervious"
         ],
@@ -230,6 +231,6 @@ return [
             "export" => "Export Transfers",
             "empty" => "Download Template"
         ],
-        "bonuses" => "Manage Bonuses"
+        "bonuses" => "Add the selected Bonuses to the transfers "
     ],
 ];

@@ -41,7 +41,7 @@ return [
     'wilaya' => [
         'actions' => [
             'add' => 'Add New State',
-            'update' => 'Update State: :code',
+            'update' => 'Update State: :name',
             'manage' => [
                 'view' => 'View State Details',
             ],
@@ -50,7 +50,8 @@ return [
     'daira' => [
         'actions' => [
             'add' => 'Add New District',
-            'update' => 'Update District: :code',
+            'update' => 'Update District: :name',
+             'manage'=> "Manage District :name Communes"
         ],
     ],
     'bank' => [
@@ -113,6 +114,25 @@ return [
             'add' => 'Add New Service',
             'update' => 'Update The Service :name',
             "manage_coordinators" => "Manage :name Coordinators",
+        ],
+    ],
+
+    'bonus' => [
+        'actions' => [
+            'add' => 'Add New Bonus',
+            'update' => 'Update The Bonus',
+        ],
+    ],
+    'global_transfer' => [
+        'actions' => [
+            'add' => 'Add New Global Transfer',
+            'update' => 'Update The Global Transfer',
+        ],
+    ],
+    'transfer' => [
+        'actions' => [
+            'add' => 'Add New  Transfer',
+            'update' => "Update :name ' The Transfer",
         ],
     ],
 

@@ -17,9 +17,16 @@ return [
 
     "banking_information" => [
         "exist" => "account number already Exists",
+
         'employee' => [
+              "account-inactive-or-missing"=>"The account :account is either inactive or the employee has not been added yet",
             'name-mismatch' => 'Employee name does not match records. Provided: ":provided", Expected: ":expected".',
         ],
+        "last_name"=>"Last name",
+        "first_name"=>"First name",
+        "bank"=>"Bank",
+        "account"=>"Bank Account",
+        "amount"=>"Amount"
     ],
     'municipalities' => [
         'code' => "Municipality Code",

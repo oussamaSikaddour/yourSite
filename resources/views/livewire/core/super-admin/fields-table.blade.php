@@ -46,7 +46,7 @@
     </div>
     @if (isset($this->fields) && $this->fields->isNotEmpty())
         <div class="table__body">
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th>

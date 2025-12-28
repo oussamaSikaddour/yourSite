@@ -67,9 +67,9 @@ class SocialAdminController extends Controller
 
       $modalTitleOptions3 = ['name' => $app['acronym']];
         // Modal 3: User Management
-        $modalTitle3 = "modals.user.actions.add.personnel";
+        $modalTitle3 = "modals.person.actions.add";
         $modalContent3 = [
-            'name' => 'default.user-modal',
+            'name' => 'core.person-modal',
             'parameters' => [],
         ];
 
@@ -119,7 +119,15 @@ class SocialAdminController extends Controller
                     "globalTransferId" => $parameters['id'],
                 ],
             ];
-            return view('pages.app.social-admin.global-transfers-details', compact('title', 'modalTitle', 'modalContent', 'parameters'));
+
+                                            $breadcrumbLinks = [
+
+            ['route' => 'dashboard', 'label' => __('pages.dashboard.name')],
+            ['route' => 'social_works_route', 'label' => __('pages.manage_social_works.name')],
+            ['route' => 'global_transfers_details_route', 'label' => __('pages.global_transfer_details.name',['motive'=>$parameters['motive']])],
+
+        ];
+            return view('pages.app.social-admin.global-transfers-details', compact('title', 'modalTitle', 'modalContent', 'parameters','breadcrumbLinks'));
         }
 
         // Handle the case when one or both keys are missing

@@ -395,10 +395,17 @@ return [
             'email-placeholder' => "Votre email",
             "message" => "Message",
             'message-placeholder' => "Votre message",
+            "sent" => "Envoyer le message",
             'responses' => [
                 'send_success' => 'Votre message a été envoyé avec succès. Une réponse vous sera envoyée à votre adresse email',
             ],
         ]
+    ],
+    "reply" => [
+        "message" => "Message",
+        'responses' => [
+            'send_success' => 'Votre réponse a été envoyée avec succès au visiteur par email.',
+        ],
     ],
     "article" => [
         'title_fr' => "Titre en français",
@@ -492,29 +499,29 @@ return [
     ],
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////               App
-'service' => [
-    "name_fr" => "Nom du département (Fr)",
-    "name_ar" => "Nom du département (Ar)",
-    "name_en" => "Nom du département (En)",
-    "introduction_fr" => "Introduction (Fr)",
-    "introduction_ar" => "Introduction (Ar)",
-    "introduction_en" => "Introduction (En)",
-    "specialty" => "Spécialité médicale",
-    "tel" => "Téléphone principal",
-    "fax" => "Fax",
-    'email' => "Email",
-    'beds_number' => "Nombre de lits",
-    'specialists_number' => "Nombre de spécialistes",
-    'physicians_number' => "Nombre de médecins",
-    'paramedics_number' => "Nombre de paramédicaux",
-    "head_of_service_id" => "Chef de département",
-    "establishment_id" => "Établissement affilié",
+    'service' => [
+        "name_fr" => "Nom du département (Fr)",
+        "name_ar" => "Nom du département (Ar)",
+        "name_en" => "Nom du département (En)",
+        "introduction_fr" => "Introduction (Fr)",
+        "introduction_ar" => "Introduction (Ar)",
+        "introduction_en" => "Introduction (En)",
+        "specialty" => "Spécialité médicale",
+        "tel" => "Téléphone principal",
+        "fax" => "Fax",
+        'email' => "Email",
+        'beds_number' => "Nombre de lits",
+        'specialists_number' => "Nombre de spécialistes",
+        'physicians_number' => "Nombre de médecins",
+        'paramedics_number' => "Nombre de paramédicaux",
+        "head_of_service_id" => "Chef de département",
+        "establishment_id" => "Établissement affilié",
 
-    'responses' => [
-        'add_success' => "Département hospitalier créé avec succès",
-        'update_success' => "Département mis à jour avec succès",
+        'responses' => [
+            'add_success' => "Département hospitalier créé avec succès",
+            'update_success' => "Département mis à jour avec succès",
+        ],
     ],
-],
     "global_transfer" => [
         'number' => "Référence du transfert",
         'date' => 'Date du transfert',

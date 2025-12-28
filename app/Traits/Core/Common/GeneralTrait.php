@@ -173,25 +173,7 @@ trait GeneralTrait
 
 
 
-    /**
-     * Inserts a given string (e.g., space) at multiple positions in the input string.
-     *
-     * @param string $string The original string to modify.
-     * @param string $insertedString The string to insert (e.g., ' ').
-     * @param array $positions Array of positions (integers) where insertions should occur.
-     * @return string The modified string with insertions.
-     */
-    public function insertSpacesAtPositions(string $string, string $insertedString, array $positions): string
-    {
-        // Sort positions in descending order to preserve positions during insertion
-        rsort($positions);
 
-        foreach ($positions as $pos) {
-            $string = substr($string, 0, $pos) . $insertedString . substr($string, $pos);
-        }
-
-        return $string;
-    }
 
     /**
      * Sets or adjusts the slide order in a slider context.

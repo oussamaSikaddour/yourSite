@@ -12,5 +12,4 @@ enum NotificationFor: string
     case ADMIN  = 'admin';
     case DOCTOR = 'doctor';
 
-
 }
