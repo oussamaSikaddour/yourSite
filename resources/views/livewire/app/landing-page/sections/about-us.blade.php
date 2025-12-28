@@ -23,7 +23,7 @@
 
             <div class="about__us__img">
               <img
-              src="{{asset('assets/app/images/AboutUs/ehs.jpg') }}"
+              src="{{asset('assets/app/images/aboutUs/ehs.jpg') }}"
               alt="aboutUs" />
             </div>
           </div>

@@ -93,7 +93,7 @@ class GeneralSetting extends Model
 
     public function getLogoUrlAttribute(): string
     {
-        return $this->logo?->url ?? asset('assets/app/images/Logo.png');
+        return $this->logo?->url ?? asset('assets/app/images/logo.png');
     }
 
     public function getHasLogoAttribute(): bool
