@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <livewire:core.sliders-table :$sliderableId :$sliderableType />
+    <livewire:core.sliders-table :$sliderableId :$sliderableType  :$sliderableName/>
 
-    <livewire:core.author.articles-table :$articleableId :$articleableType />
+    <livewire:core.author.articles-table :$articleableId :$articleableType :$articleableName />
 @endsection

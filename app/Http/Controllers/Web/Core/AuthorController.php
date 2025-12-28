@@ -30,13 +30,13 @@ class AuthorController extends Controller
 
         // Modal configuration
         $modalTitle = __('modals.slider.actions.add');
-        $modalTitleOptions =['name'=>$sliderableName];
+        $modalTitleOptions = ['name' => $sliderableName];
         $modalContent = [
             'name' => 'core.slider-modal',
             'parameters' => [
-                              'sliderableId' => $sliderableId,
-                              'sliderableType' => $sliderableType]
-                              ,
+                'sliderableId' => $sliderableId,
+                'sliderableType' => $sliderableType
+            ],
         ];
 
         // Return the admin sliders view
@@ -62,9 +62,10 @@ class AuthorController extends Controller
         // Extract query parameters with defaults and safe access
         $sliderableId   = $request->query('sliderableId');
         $sliderableType = $request->query('sliderableType');
-         $sliderableName = $request->query('sliderableName');
+        $sliderableName = $request->query('sliderableName');
         $sliderId       = $request->query('id');
         $sliderName     = $request->query('name');
+
 
 
         // Abort early if required identifiers are missing
@@ -87,6 +88,26 @@ class AuthorController extends Controller
             ],
         ];
 
+        $breadcrumbLinks =
+            [
+                ['route' => 'dashboard',      'label' => __('pages.dashboard.name')],
+                ['route' => 'services_route', 'label' => __('pages.services.name')],
+                [
+                    'route' => 'service_route',
+                    'label' => __('pages.service.name', [
+                        'name' => $sliderableName,
+                    ]),
+                    'params' => [
+                        'showBreadcrumb' => "true",
+                        'id' => $sliderableId,
+                    ]
+                ],
+                [
+                    'route' => 'slider_route',
+                    'label' => __('pages.slider.name', ['name' => $sliderName]),
+                ],
+            ];
+
         // Include TinyMCE editor flag
         $containsTinyMce = true;
 
@@ -101,6 +122,7 @@ class AuthorController extends Controller
             'sliderableName',
             'sliderId',
             'sliderName',
+            'breadcrumbLinks'
         ));
     }
 
@@ -123,7 +145,7 @@ class AuthorController extends Controller
 
         // Modal configuration
         $modalTitle = __('modals.article.actions.add');
-        $modalTitleOptions =['name'=>$articleableName];
+        $modalTitleOptions = ['name' => $articleableName];
         $modalContent = [
             'name' => 'core.author.article-modal',
             'parameters' => [
@@ -141,8 +163,8 @@ class AuthorController extends Controller
             'modalContent',
             'articleableId',
             'articleableType',
-             'articleableName',
-             'modalTitleOptions',
+            'articleableName',
+            'modalTitleOptions',
             'containsTinyMce'
         ));
     }

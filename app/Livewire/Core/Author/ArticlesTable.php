@@ -28,6 +28,9 @@ class ArticlesTable extends Component
     public $articleableType = "";
     #[Url()]
     public $articleableId = "";
+    #[Url()]
+    public $articleableName = "";
+
 
     public $articleableIdsSelectorHtml = "";
 
