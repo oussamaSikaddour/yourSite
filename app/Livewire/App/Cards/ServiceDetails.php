@@ -38,6 +38,8 @@ class ServiceDetails extends Component
         $this->slider = Slider::with(['slides' => function ($query) {
             $query->whereHas('image');
         }])
+        ->where('sliderable_id',$this->service->id)
+        ->where('sliderable_type',Service::class)
         ->where('position', 1)
         ->where('state', 'published')
         ->first();
