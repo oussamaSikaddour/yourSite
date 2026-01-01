@@ -2,7 +2,7 @@
     <h3>
         @lang("forms.forgot_password.instructions.email")
     </h3>
-    <div class="column">
+    <div class="column center">
         <x-core.form.input
        model="form.email"
         :label="__('forms.forgot_password.email')"
