@@ -70,7 +70,7 @@ $this->superAdminDropdownItems= [
 
         ];
 
-$this->adminDropdownLink=__('sidebar.dropdowns.admin');
+$this->adminDropdownLink=__('sideBar.dropdowns.admin');
 
 $this->adminDropdownItems=[
     [
