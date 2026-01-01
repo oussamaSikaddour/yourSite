@@ -51,7 +51,7 @@ class AddForm extends Form
             'bankable_id' => ['nullable', 'integer'],
             'bankable_type' => [
                 'nullable',
-                Rule::in(['App\Models\User','App\Models\GeneralSetting']),
+                Rule::in(['App\Models\Person','App\Models\GeneralSetting']),
             ],
         ];
     }
