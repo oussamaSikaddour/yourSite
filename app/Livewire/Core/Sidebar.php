@@ -48,7 +48,7 @@ class Sidebar extends Component
 
     public function  mount() {
 
-        $this->superAdminDropdownLink=__('sidebar.dropdowns.super_admin');
+        $this->superAdminDropdownLink=__('sideBar.dropdowns.super_admin');
 
 $this->superAdminDropdownItems= [
             [
