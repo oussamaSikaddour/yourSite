@@ -30,7 +30,7 @@
     {{-- Info --}}
     <div class="article__header__info">
         <h2>{{ $article->title }}</h2>
-        <span>{{ $article->published_at }}</span>
+        <span>{{ $this->formatLocalizedDate($article->published_at) }}</span>
     </div>
 
     {{-- Content --}}
@@ -43,13 +43,13 @@
 
     {{-- Footer --}}
     <div class="article__footer">
-        <button
+        {{-- <button
             class="button button--action"
             wire:click="toggleLess"
         >
             {{ $less ? __('cards.article.extend') : __('cards.article.less') }}
             <i class="fa-solid fa-arrow-down"></i>
-        </button>
+        </button> --}}
     </div>
 
 </div>
