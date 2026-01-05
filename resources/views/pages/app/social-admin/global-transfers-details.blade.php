@@ -19,7 +19,13 @@
         </div>
 
     </div>
-
-    <livewire:app.social-admin.bonuses-table :simplisticView="true" />
-    <livewire:app.social-admin.transfers-table :globalTransferId="$parameters['id']" :motive="$parameters['motive']" />
+    <div class="grid">
+        <div class="grid__slot">
+            <livewire:app.social-admin.bonuses-table :simplisticView="true" />
+        </div>
+        <div class="grid__divider" role="separator" aria-orientation="vertical" tabindex="0"></div>
+        <div class="grid__slot">
+            <livewire:app.social-admin.transfers-table :globalTransferId="$parameters['id']" :motive="$parameters['motive']" />
+        </div>
+    </div>
 @endsection

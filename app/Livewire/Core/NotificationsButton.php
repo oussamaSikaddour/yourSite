@@ -48,7 +48,7 @@ class NotificationsButton extends Component
     {
 
 
-        //  $notification->update(['active' => false]);
+         $notification->update(['active' => false]);
         if ($notification->for_type->value === NotificationFor::ADMIN->value && $notification->targetable_type == Message::class) {
             return redirect()->route(RoutesNames::MESSAGES->value);
         }

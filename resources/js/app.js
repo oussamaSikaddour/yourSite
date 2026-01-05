@@ -15,6 +15,7 @@ import ToolTip from "./core/components/Tooltip.js";
 import Table from "./core/components/Table.js";
 import Modal from "./core/components/Modal.js";
 import Dialog from "./core/components/Dialog.js";
+import Grid  from "./core/components/Grid.js";
 
 // ------------------------------------------------------
 // Form Helpers
@@ -96,6 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Feedback
     safeRun(ErrorsNotifications);
     safeRun(Toast);
+    safeRun(Grid);
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

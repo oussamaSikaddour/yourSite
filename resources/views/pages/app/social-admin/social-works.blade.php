@@ -34,7 +34,12 @@
         </div>
 
     </div>
-
-    <livewire:core.persons-table />
-    <livewire:app.social-admin.global-transfers-table />
-@endsection
+    <div class="grid">
+        <div class="grid__slot">
+            <livewire:core.persons-table />
+        </div>
+        <div class="grid__divider" role="separator" aria-orientation="vertical" tabindex="0"></div>
+        <div class="grid__slot">
+            <livewire:app.social-admin.global-transfers-table />
+        </div>
+    @endsection
