@@ -25,7 +25,18 @@
         </div>
     </div>
 
-    <livewire:core.sliders-table :$sliderableId :$sliderableType  :$sliderableName/>
 
-    <livewire:core.author.articles-table :$articleableId :$articleableType :$articleableName />
+        <div class="grid">
+        <div class="grid__slot">
+              <livewire:core.sliders-table :$sliderableId :$sliderableType  :$sliderableName/>
+        </div>
+        <div class="grid__divider" role="separator" aria-orientation="vertical" tabindex="0"></div>
+        <div class="grid__slot">
+                <livewire:core.author.articles-table :$articleableId :$articleableType :$articleableName />
+        </div>
+    </div>
+
+
+
+
 @endsection
