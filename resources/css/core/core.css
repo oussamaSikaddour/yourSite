@@ -1589,55 +1589,95 @@ input[type=radio]:checked:disabled + label:before {
 }
 
 /* =========================================
-   GRID (supports normal grid + split grid)
+   FLEX GRID (normal + split)
    Only: .grid .grid__slot .grid__divider
 ========================================= */
 .grid {
   /* defaults */
   --gap: 1.25rem;
-  --cols: 2; /* normal grid columns on desktop */
+  --cols: 2; /* normal mode columns on desktop */
   --left: 50%; /* split mode left width */
   --divider: 10px; /* divider grab width */
-  display: grid;
-  gap: var(--gap);
-  width: 100%;
+  background-color: var(--clr-bg-light);
+  border: var(--border);
+  border-radius: var(--br);
+  width: 95%;
   min-width: 0;
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap; /* normal mode: allows multiple columns */
+  gap: var(--gap);
   align-items: center;
-  /* mobile default */
-  grid-template-columns: 1fr;
+  /* mobile default: stacked */
+  flex-direction: column;
+  box-shadow: 4px 5px 11px -4px rgba(0, 0, 0, 0.75) inset;
+  -webkit-box-shadow: 4px 5px 11px -4px rgba(0, 0, 0, 0.75) inset;
+  -moz-box-shadow: 4px 5px 11px -4px rgba(0, 0, 0, 0.75) inset;
 }
 @media (min-width: 48em) {
   .grid {
-    align-items: start;
-    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    align-items: flex-start;
+    flex-direction: row;
   }
 }
 
-/* Normal mode (no divider): 2 columns on desktop */
+/* Normal mode slots: behave like columns */
+.grid:not(:has(.grid__divider)) .grid__slot {
+  width: 100%;
+  min-width: 0;
+}
+@media (min-width: 48em) {
+  .grid:not(:has(.grid__divider)) .grid__slot {
+    /* N columns: each slot is 1/N of the row */
+    flex: 0 0 calc((100% - var(--gap) * (var(--cols) - 1)) / var(--cols));
+    max-width: calc((100% - var(--gap) * (var(--cols) - 1)) / var(--cols));
+  }
+}
+
 /* Split mode (divider exists) */
 .grid:has(.grid__divider) {
+  flex-wrap: nowrap;
   gap: 0; /* divider replaces gap */
-  grid-template-columns: var(--left) var(--divider) minmax(0, 1fr);
   align-items: stretch;
 }
-
-/* Mobile: stack vertically even if split mode */
 @media (max-width: 48em) {
   .grid:has(.grid__divider) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 }
+
+/* Split mode layout:
+   [slot][divider][slot]
+*/
+.grid:has(.grid__divider) .grid__slot:first-of-type {
+  flex: 0 0 var(--left);
+  min-width: 0;
+}
+
+.grid:has(.grid__divider) .grid__divider {
+  flex: 0 0 var(--divider);
+}
+
+.grid:has(.grid__divider) .grid__slot:last-of-type {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 /* Slot: safe for big HTML */
 .grid__slot {
-  min-width: 0; /* CRITICAL: allows overflow inside grid items */
+  min-width: 0;
   width: 100%;
-  /* Big content scrolls horizontally inside the slot */
   overflow-x: auto;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
-  scrollbar-gutter: stable both-edges;
+  scrollbar-gutter: auto;
   padding-bottom: 0.25rem;
-  /* Table safety inside slot */
+}
+@media (min-width: 48em) {
+  .grid__slot {
+    flex-direction: column;
+    scrollbar-gutter: stable both-edges;
+  }
 }
 .grid__slot .table__container {
   min-width: 0;
@@ -1659,16 +1699,13 @@ input[type=radio]:checked:disabled + label:before {
   /* easier to grab + visible rail */
   width: 1.5rem;
   border: var(--border);
-  background: #E9EAF4;
+  border-top: unset;
+  border-bottom: unset;
+  background: var(--clr-light);
   box-shadow: var(--div-shadow);
 }
 
-/* Focus (keyboard) */
-.grid__divider:focus {
-  outline: none;
-}
-
-/* Hide divider when stacked (small screens) */
+/* Hide divider when stacked */
 @media (max-width: 48em) {
   .grid__divider {
     display: none;
@@ -1681,10 +1718,6 @@ input[type=radio]:checked:disabled + label:before {
 
 .grid.is-dragging .grid__slot {
   pointer-events: none;
-}
-
-.grid.is-dragging .grid__divider {
-  background: #CED0D4;
 }
 
 .nav {
@@ -3724,4 +3757,4 @@ svg {
 }
 .error__card div a:hover {
   color: rgb(4.4418604651, 69.9593023256, 91.0581395349);
-}
+}/*# sourceMappingURL=style.css.map */
