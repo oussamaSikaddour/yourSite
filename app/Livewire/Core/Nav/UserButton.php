@@ -45,11 +45,11 @@ class UserButton extends Component
     protected function getUserRoutes(): array
     {
         return [
-            [
-                'route' =>"profile",
-                'label' => __('pages.profile.name'),
-                'icon' => 'profile',
-            ],
+            // [
+            //     'route' =>"profile",
+            //     'label' => __('pages.profile.name'),
+            //     'icon' => 'profile',
+            // ],
             [
                 'route' => 'change_password',
                 'label' => __('pages.change_password.name'),
