@@ -204,7 +204,7 @@ return [
     "landing_page" => [
         "name" => "الصفحة الرئيسية",
         "links" => [
-            'hero' => "الصفحة الرئيسية",
+            'hero' => "مرحباً",
             'about_us' => "من نحن",
             "services" => "أقسامنا",
             'contact_us' => "اتصل بنا"

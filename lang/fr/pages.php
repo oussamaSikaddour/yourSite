@@ -190,7 +190,7 @@ return [
     "landing_page" => [
         "name" => "Page d'accueil",
         "links" => [
-            'hero' => "Hero",
+            'hero' => "Accueil",
             'about_us' => "À propos",
             "services" => "Nos départements",
             'contact_us' => "Contactez-nous"

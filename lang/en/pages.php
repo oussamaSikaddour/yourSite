@@ -192,7 +192,7 @@ return [
     "landing_page" => [
         "name" => "Landing Page",
         "links" => [
-            'hero' => "Hero",
+            'hero' => "Welcome",
             'about_us' => "About Us",
              "services"=> "Services",
             'contact_us' => "Contact Us"
