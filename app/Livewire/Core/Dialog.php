@@ -33,7 +33,6 @@ class Dialog extends Component
     public function closeDialog()
     {
         $this->reset(['isOpen', 'question', 'details', 'actionEvent']);
-
     }
 
     public function confirmAction()

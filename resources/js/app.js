@@ -15,7 +15,7 @@ import ToolTip from "./core/components/Tooltip.js";
 import Table from "./core/components/Table.js";
 import Modal from "./core/components/Modal.js";
 import Dialog from "./core/components/Dialog.js";
-import Grid  from "./core/components/Grid.js";
+import Grid from "./core/components/Grid.js";
 
 // ------------------------------------------------------
 // Form Helpers
@@ -35,15 +35,15 @@ import { manageFileInputs } from "./core/components/FileInputs.js";
 import ErrorsNotifications from "./core/components/ErrorsNotifications.js";
 import Toast from "./core/components/Toast.js";
 
-
 // ------------------------------------------------------
 // Loader
 // ------------------------------------------------------
-import { createLoader, showLoader, hideLoader } from "./core/components/Loader.js";
+import {
+    createLoader,
+    showLoader,
+    hideLoader,
+} from "./core/components/Loader.js";
 import { on } from "./utils/DespatchCustomEvent.js";
-
-
-
 
 import LandingPageNavigation from "./app/LandingPageNavigation.js";
 import Carousel from "./app/Carsoule.js";
@@ -53,20 +53,19 @@ import Counter from "./app/Counter.js";
 // Safe Initializer Helper
 // ------------------------------------------------------
 const safeRun = (fn, parameters = []) => {
-  try {
-    // Check if parameters is an array and not null/undefined
-    if (Array.isArray(parameters) && parameters.length > 0) {
-      return fn(...parameters);
-    } else {
-      return fn();
+    try {
+        // Check if parameters is an array and not null/undefined
+        if (Array.isArray(parameters) && parameters.length > 0) {
+            return fn(...parameters);
+        } else {
+            return fn();
+        }
+    } catch (e) {
+        console.warn(`[init error] ${fn.name || "anonymous function"}:`, e);
+        // Return undefined or handle the error as needed
+        return undefined;
     }
-  } catch (e) {
-    console.warn(`[init error] ${fn.name || "anonymous function"}:`, e);
-    // Return undefined or handle the error as needed
-    return undefined;
-  }
 };
-
 
 // ------------------------------------------------------
 // Boot on DOM Ready
@@ -99,19 +98,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     safeRun(Toast);
     safeRun(Grid);
 
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////           App
-  ///////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////           App
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
-  safeRun(LandingPageNavigation);
-  safeRun(Carousel);
+    safeRun(LandingPageNavigation);
+    safeRun(Carousel);
 
-
-  // Loader END (UI ready)
-
-
-
+    // Loader END (UI ready)
 
     // Loader END (UI ready)
     hideLoader();
@@ -134,38 +128,43 @@ clearMultiFormStepOnEvent("site-params-multi-form-clear");
 
 //IinitON Event
 
-on("init-tooltip", (event) => {
-
-    safeRun(ToolTip)
-});
 on("init-accordion", (event) => {
-    safeRun(Accordion)
+    safeRun(Accordion);
 });
 on("init-table", (event) => {
-    safeRun(Table)
+    safeRun(Table);
 });
 on("init-radio", (event) => {
-    safeRun(manageRadioInputs)
+    safeRun(manageRadioInputs);
 });
 on("init-checkBox", (event) => {
-    safeRun(manageCheckBoxes)
+    safeRun(manageCheckBoxes);
 });
 on("init-file-input", (event) => {
-    safeRun(manageFileInputs)
+    safeRun(manageFileInputs);
 });
 
+on("init-tooltip", (event) => {
+    safeRun(ToolTip);
+});
 
+// Livewire 3: re-init after DOM morph (dialog open/close, rerenders, etc.)
+document.addEventListener("livewire:init", () => {
+    safeRun(ToolTip);
 
+    // When Livewire adds new nodes (like modal content) or updates nodes
+    Livewire.hook("morph.added", () => safeRun(ToolTip));
+    Livewire.hook("morph.updated", () => safeRun(ToolTip));
+});
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////           App
-  //////////////////////////////////////////////////////////////////////////////////////////////
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////           App
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 on("about__us__is__animated", () => {
-  safeRun(Counter,['.about__us']);
-})
+    safeRun(Counter, [".about__us"]);
+});
 
 on("services__is__animated", () => {
-  safeRun(Counter,['.services']);
+    safeRun(Counter, [".services"]);
 });

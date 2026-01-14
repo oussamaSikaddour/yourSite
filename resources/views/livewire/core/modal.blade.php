@@ -1,4 +1,6 @@
-<div role="dialog" aria-labelledby="dialog_label"
+<div
+wire:ignore.self
+role="dialog" aria-labelledby="dialog_label"
     class="modal {{ $isOpen ? 'open' : '' }} {{ $transparent ? 'transparent' : '' }}" id="defaultModal">
 
     <div class="modal__content">
