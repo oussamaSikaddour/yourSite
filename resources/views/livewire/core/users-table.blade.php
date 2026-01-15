@@ -67,7 +67,7 @@
                                 @if (!$u->hasRoleSlug('super_admin'))
                                     <x-core.button variant="danger" icon="delete" function="openDeleteUserDialog"
                                         :parameters="[$u]" rounded=true hasTooltip=true :tooltip="__('toolTips.user.delete')" />
-                                @endif
+
 
                                 <livewire:core.open-modal-button wire:key="edit-{{ $u->id }}" rounded=true
                                     hasTooltip=true :tooltip="__('toolTips.user.update')" icon="edit"
@@ -77,7 +77,7 @@
                                             'id' => $u->id,
                                         ],
                                     ]" />
-
+                                @endif
 
 
 
