@@ -96,7 +96,7 @@ public function existingRoles()
                 $this->dispatch('open-toast', $response['message'] ?? __('forms.common.errors.default'));
             }
         } else {
-            $this->dispatch('open-errors', $response['error'] ?? [__('forms.common.errors.default')]);
+            $this->dispatch('open-errors', $response['errors'] ?? [__('forms.common.errors.default')]);
         }
     }
 

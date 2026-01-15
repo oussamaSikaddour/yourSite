@@ -257,6 +257,10 @@ return [
         "password" => "Password",
         "person_id" => "Personnel",
         "avatar" => "Avatar",
+        "errors"=>[
+            'unique_super_admin' => "You can't deactivate this user because this is the last active super admin user.",
+
+        ],
         'responses' => [
             "add_success" => "User account created successfully",
             "update_success" => "User account updated: :name",
@@ -274,6 +278,7 @@ return [
             'roles_exist'      => 'One or more specified roles are invalid',
             'user_not_found'   => 'The requested user account was not found',
             'error_title'      => 'Role Assignment Error',
+            'unique_super_admin' => "You can't remove super admin role for this user because this is the last super admin user.",
         ],
         'responses' => [
             'success'      => 'User roles have been successfully updated',

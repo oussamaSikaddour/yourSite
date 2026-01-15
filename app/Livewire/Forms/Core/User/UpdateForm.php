@@ -8,8 +8,8 @@ use App\Traits\Core\Common\ModelFileTrait;
 use App\Traits\Core\Common\ModelImageTrait;
 use App\Traits\Core\Web\ResponseTrait;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Livewire\Form;
 
@@ -22,17 +22,14 @@ class UpdateForm extends Form
     public $email;
     public $password;
     public $avatar;
+    public $is_active;
 
-    /**
-     * Validation rules.
-     */
     public function rules(): array
     {
         return [
-
-            'name'  => ['nullable', 'string', 'min:3', 'max:100'],
+            'name'     => ['nullable', 'string', 'min:3', 'max:100'],
             'email'    => [
-                'nullable',
+                'required',
                 'string',
                 'email',
                 'max:255',
@@ -40,41 +37,73 @@ class UpdateForm extends Form
             ],
             'password' => ['nullable', 'string', 'min:8', 'max:255'],
             'avatar'   => ['nullable', 'file', 'mimes:jpeg,png,gif,ico,webp', 'max:10000'],
+            'is_active'=> ['required', 'boolean'],
         ];
     }
 
-    /**
-     * Localized attribute names.
-     */
     public function validationAttributes(): array
     {
         return $this->returnTranslatedResponseAttributes('user', [
             'avatar',
             'name',
             'password',
-            'email'
+            'email',
+            'is_active',
         ]);
     }
 
-    /**
-     * Store the user inside a database transaction.
-     */
     public function save($user)
     {
         try {
             $data = $this->validate();
 
+            // Normalize Livewire boolean values ("0"/"1"/0/1/true/false) to real bool
+            $data['is_active'] = filter_var($data['is_active'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $data['is_active'] = $data['is_active'] ?? false;
+
             return DB::transaction(function () use ($user, $data) {
 
-                // Create user
-                if (!empty($data['password'])) {
+                // ---- SUPER ADMIN "last active" protection ----
+                $superAdminRoleId = (int) Role::where('slug', 'super_admin')->value('id');
+
+                if ($superAdminRoleId) {
+                    $userIsSuperAdmin = $user->roles()
+                        ->where('roles.id', $superAdminRoleId)
+                        ->exists();
+
+                    $deactivating = $userIsSuperAdmin
+                        && (bool) $user->is_active === true
+                        && (bool) $data['is_active'] === false;
+
+                    if ($deactivating) {
+                        $otherActiveSuperAdmins = User::whereKeyNot($user->id)
+                            ->where('is_active', true)
+                            ->whereHas('roles', function ($q) use ($superAdminRoleId) {
+                                $q->where('roles.id', $superAdminRoleId);
+                            })
+                            ->count();
+
+                        if ($otherActiveSuperAdmins === 0) {
+                            return $this->response(false, errors: [
+                                __('forms.user.errors.unique_super_admin_active'),
+                                // or reuse: __('forms.role.errors.unique_super_admin')
+                            ]);
+                        }
+                    }
+                }
+                // --------------------------------------------
+
+                // Password handling
+                if (! empty($data['password'])) {
                     $data['password'] = Hash::make($data['password']);
                 } else {
                     unset($data['password']); // prevent null overwrite
                 }
 
+                // Update user
                 $user->update($data);
 
+                // Upload avatar (if provided)
                 $this->uploadImage($user);
 
                 return $this->response(
@@ -83,22 +112,14 @@ class UpdateForm extends Form
                 );
             });
         } catch (\Illuminate\Validation\ValidationException $e) {
-
             return $this->response(false, errors: $e->validator->errors()->all());
         } catch (\Throwable $e) {
+            Log::error('UpdateForm User update error: ' . $e->getMessage());
 
-            Log::error('UpdateForm User creation error: ' . $e->getMessage());
-
-            return $this->response(
-                false,
-                errors: __('forms.common.errors.default')
-            );
+            return $this->response(false, errors: __('forms.common.errors.default'));
         }
     }
 
-    /**
-     * Upload user avatar.
-     */
     protected function uploadImage(User $user): void
     {
         if ($this->avatar) {
@@ -111,3 +132,5 @@ class UpdateForm extends Form
         }
     }
 }
+
+

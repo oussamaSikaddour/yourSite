@@ -254,6 +254,10 @@ return [
         "password" => "Mot de passe",
         "person_id" => "Personnel",
         "avatar" => "Avatar",
+        "errors" => [
+            'unique_super_admin' => "You can't deactivate this user because this is the last active super admin user.",
+
+        ],
         'responses' => [
             "add_success" => "Compte utilisateur créé avec succès",
             "update_success" => "Compte utilisateur mis à jour : :name",
@@ -271,6 +275,7 @@ return [
             'roles_exist'      => 'Un ou plusieurs rôles spécifiés sont invalides',
             'user_not_found'   => 'Le compte utilisateur demandé n\'a pas été trouvé',
             'error_title'      => 'Erreur d\'attribution des rôles',
+            'unique_super_admin' => "Vous ne pouvez pas supprimer le rôle de super administrateur pour cet utilisateur car c'est le dernier utilisateur super administrateur.",
         ],
         'responses' => [
             'success'      => 'Les rôles utilisateur ont été mis à jour avec succès',

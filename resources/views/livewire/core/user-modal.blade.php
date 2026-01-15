@@ -20,25 +20,34 @@
                             :data="$personsOptions" :showError="true" />
                     @endif
 
-                    @canany(['super-admin-access', 'admin-access'])
-                        <div class="checkbox__group">
-                            <div class="choices" role="group" aria-labelledby="checkbox-choices">
-                                <x-core.form.check-box model="isActiveCheckBoxValue" value="{{ !$isActiveCheckBoxValue }}"
-                                    :label="__('forms.user.is_active')" htmlId="UM-isActive" :live="true" />
+                    @if ($form === 'updateForm')
+                        @canany(['super-admin-access', 'admin-access'])
+                            <div class="checkbox__group">
+                                <div class="choices" role="group" aria-labelledby="checkbox-choices">
+                                    <x-core.form.check-box model="isActiveCheckBoxValue"
+                                        value="{{ !$isActiveCheckBoxValue }}" :label="__('forms.user.is_active')" htmlId="UM-isActive"
+                                        :live="true" />
+                                </div>
                             </div>
-                        </div>
-                    @endcanany
+                        @endcanany
+                    @endif
                 </div>
 
                 <!-- Column 2 -->
                 <div class="column">
-                    <x-core.file-input   model="{{ $form }}.avatar"  types="img" type="avatar"   :fileUri="$temporaryImageUrl"/>
+                    <x-core.file-input model="{{ $form }}.avatar" types="img" type="avatar"
+                        :fileUri="$temporaryImageUrl" />
                 </div>
 
             </div> <!-- end .row -->
 
             <div class="form__actions">
-                <x-core.button type="submit" variant="primary" :text="__('forms.common.actions.submit')" icon="confirm" expectLoading="true"
+                <x-core.button type="submit"
+                variant="primary"
+                :text="__('forms.common.actions.submit')"
+                 icon="confirm"
+                            :wireTargets="['handleSubmit']"
+                 expectLoading="true"
                     fullWidth="true" />
             </div>
 

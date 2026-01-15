@@ -58,6 +58,13 @@ class User extends Authenticatable
 
 
 
+    public function hasRoleSlug(string $slug): bool
+{
+    // If roles are eager-loaded, this won't hit DB again
+    return $this->roles->contains('slug', $slug);
+}
+
+
     public function avatar(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable')
