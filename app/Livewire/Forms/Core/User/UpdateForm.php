@@ -85,7 +85,7 @@ class UpdateForm extends Form
 
                         if ($otherActiveSuperAdmins === 0) {
                             return $this->response(false, errors: [
-                                __('forms.user.errors.unique_super_admin_active'),
+                                __('forms.user.errors.unique_super_admin'),
                                 // or reuse: __('forms.role.errors.unique_super_admin')
                             ]);
                         }
