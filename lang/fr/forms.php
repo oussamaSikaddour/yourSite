@@ -245,9 +245,7 @@ return [
         ],
     ],
     "user" => [
-"errors" => [
-    'unique_super_admin' => "Vous ne pouvez pas désactiver cet utilisateur car c'est le dernier super administrateur actif.",
-],
+
         'email' => "Email",
         "name" => "Nom d'utilisateur",
         'is_active' => 'Statut du compte',
@@ -255,8 +253,7 @@ return [
         "person_id" => "Personnel",
         "avatar" => "Avatar",
         "errors" => [
-            'unique_super_admin' => "You can't deactivate this user because this is the last active super admin user.",
-
+            'unique_super_admin' => "Vous ne pouvez pas désactiver cet utilisateur car c'est le dernier super administrateur actif.",
         ],
         'responses' => [
             "add_success" => "Compte utilisateur créé avec succès",
