@@ -245,9 +245,9 @@ return [
         ],
     ],
     "user" => [
-        'instructions' => [
-            "email" => "Email valide requis. Un code de vérification sera envoyé à cette adresse.",
-        ],
+"errors" => [
+    'unique_super_admin' => "Vous ne pouvez pas désactiver cet utilisateur car c'est le dernier super administrateur actif.",
+],
         'email' => "Email",
         "name" => "Nom d'utilisateur",
         'is_active' => 'Statut du compte',
