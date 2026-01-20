@@ -69,17 +69,15 @@
                                         :parameters="[$u]" rounded=true hasTooltip=true :tooltip="__('toolTips.user.delete')" />
 
 
-                                <livewire:core.open-modal-button wire:key="edit-{{ $u->id }}" rounded=true
-                                    hasTooltip=true :tooltip="__('toolTips.user.update')" icon="edit"
-                                    modalTitle="modals.user.actions.update" :modalTitleOptions="['name' => $u->name]" :modalContent="[
-                                        'name' => 'core.user-modal',
-                                        'parameters' => [
-                                            'id' => $u->id,
-                                        ],
-                                    ]" />
+                                    <livewire:core.open-modal-button wire:key="edit-{{ $u->id }}" rounded=true
+                                        hasTooltip=true :tooltip="__('toolTips.user.update')" icon="edit"
+                                        modalTitle="modals.user.actions.update" :modalTitleOptions="['name' => $u->name]" :modalContent="[
+                                            'name' => 'core.user-modal',
+                                            'parameters' => [
+                                                'id' => $u->id,
+                                            ],
+                                        ]" />
                                 @endif
-
-
 
                                 @canany(['super-admin-access', 'admin-access'])
                                     <livewire:core.open-modal-button wire:key="mRoles-{{ $u->id }}" rounded=true
