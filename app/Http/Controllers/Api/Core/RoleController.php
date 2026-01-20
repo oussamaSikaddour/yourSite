@@ -11,6 +11,7 @@ use App\Traits\Core\Api\ResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
@@ -58,18 +59,45 @@ class RoleController extends Controller
     /**
      * Assign roles to a user (super-admin only).
      */
-    public function manageRoles(ManageRolesRequest $request): JsonResponse
-    {
-        try {
-            $data = $request->validated();
-            $currentUser = Auth::user();
-            $user = User::findOrFail($data['user_id']);
+public function manageRoles(ManageRolesRequest $request): JsonResponse
+{
+    try {
+        $data = $request->validated();
+        $currentUser = Auth::user();
+        $user = User::findOrFail($data['user_id']);
 
-            $user->roles()->sync($data['roles']); // sync roles atomically
+        $data['roles'] = array_map('intval', $data['roles'] ?? []);
+
+        return DB::transaction(function () use ($data, $currentUser, $user) {
+
+            $superAdminRoleId = (int) Role::where('slug', 'super_admin')->value('id');
+
+            if ($superAdminRoleId) {
+                $userIsSuperAdmin = $user->roles()
+                    ->where('roles.id', $superAdminRoleId)
+                    ->exists();
+
+                $removingSuperAdmin = $userIsSuperAdmin
+                    && ! in_array($superAdminRoleId, $data['roles'], true);
+
+                if ($removingSuperAdmin) {
+                    $otherSuperAdminsCount = User::whereKeyNot($user->id)
+                        ->whereHas('roles', function ($q) use ($superAdminRoleId) {
+                            $q->where('roles.id', $superAdminRoleId);
+                        })
+                        ->lockForUpdate() // optional extra safety
+                        ->count();
+
+                    if ($otherSuperAdminsCount === 0) {
+                        return $this->responseError('role', __('forms.role.errors.unique_super_admin'), 422);
+                    }
+                }
+            }
+
+            $user->roles()->sync($data['roles']);
 
             $message = __('forms.role.responses.success');
 
-            // If user updated their own roles, revoke current token
             if ($user->id === $currentUser->id) {
                 $currentUser->currentAccessToken()?->delete();
                 $message = __('forms.role.responses.own_success');
@@ -82,15 +110,18 @@ class RoleController extends Controller
                 'user' => $user->only('id', 'name', 'email'),
                 'roles' => $user->roles->pluck('id', 'slug'),
             ]);
+        });
 
-        } catch (\Throwable $e) {
-            Log::error('RoleController@manageRoles error', [
-                'request_data' => $request->all(),
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
+    } catch (\Throwable $e) {
+        Log::error('RoleController@manageRoles error', [
+            'request_data' => $request->all(),
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
 
-            return $this->responseError(__('forms.common.errors.default'), 500);
-        }
+        return $this->responseError(__('forms.common.errors.default'), 500);
     }
+}
+
+
 }

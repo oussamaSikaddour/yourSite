@@ -4,11 +4,12 @@ namespace App\Http\Requests\Core\User;
 
 use App\Http\Requests\ApiFormRequest;
 use App\Traits\Core\Web\ResponseTrait;
+use Illuminate\Validation\Rule;
 
 class PatchRequest extends ApiFormRequest
 {
-
     use ResponseTrait;
+
     public function authorize(): bool
     {
         return true;
@@ -26,6 +27,15 @@ class PatchRequest extends ApiFormRequest
                 'max:10000'
             ],
 
+            'email' => [
+                'sometimes', // PATCH: only validate if present
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')
+                    ->whereNull('deleted_at')
+                    ->ignore($this->route('user')), // ✅ important fix
+            ],
 
             'name' => ['sometimes', 'string', 'min:3', 'max:100'],
 
@@ -35,7 +45,6 @@ class PatchRequest extends ApiFormRequest
 
     protected function prepareForValidation(): void
     {
-        // Only useful if you need to adjust field names
         if ($this->has('isActive')) {
             $this->merge([
                 'is_active' => $this->isActive,
@@ -43,10 +52,8 @@ class PatchRequest extends ApiFormRequest
         }
     }
 
-
-        public function attributes(): array
+    public function attributes(): array
     {
-
         return $this->returnTranslatedResponseAttributes('user', [
             'is_active',
             'name',

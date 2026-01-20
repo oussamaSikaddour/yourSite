@@ -177,24 +177,90 @@ class UserController extends Controller
             return $this->responseError(__('forms.common.errors.default'), 500);
         }
     }
-    public function update(string $lang, PatchRequest $request, User $user): JsonResponse
-    {
-        try {
-            $data = $request->validated();
-            return DB::transaction(function () use ($data, $user, $request) {
 
-                if ($request->hasFile('avatar')) {
-                    $this->uploadAndUpdateImage($request->file('avatar'), $user->id, User::class, 'avatar');
-                }
-                $user->update($data);
 
-                return $this->responseSuccess('users', $user->id, ['user' => new UserResource($user)]);
-            });
-        } catch (\Throwable $e) {
-            Log::error('UserController@update error', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-            return $this->responseError(__('forms.common.errors.default'), 500);
+
+public function update(string $lang, PatchRequest $request, User $user): JsonResponse
+{
+    try {
+        $data = $request->validated();
+
+        // Normalize boolean like Livewire ("0"/"1"/0/1/true/false)
+        if (array_key_exists('is_active', $data)) {
+            $data['is_active'] = filter_var($data['is_active'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $data['is_active'] = $data['is_active'] ?? false;
         }
+
+        // Password handling like Livewire
+        if (array_key_exists('password', $data)) {
+            if (! empty($data['password'])) {
+                $data['password'] = Hash::make($data['password']);
+            } else {
+                unset($data['password']); // prevent null/empty overwrite
+            }
+        }
+
+        return DB::transaction(function () use ($data, $user, $request) {
+
+            // ---- SUPER ADMIN "last active" protection (inspired from Livewire) ----
+            $superAdminRoleId = (int) Role::where('slug', 'super_admin')->value('id');
+
+            if ($superAdminRoleId && array_key_exists('is_active', $data)) {
+                $userIsSuperAdmin = $user->roles()
+                    ->where('roles.id', $superAdminRoleId)
+                    ->exists();
+
+                $deactivating = $userIsSuperAdmin
+                    && (bool) $user->is_active === true
+                    && (bool) $data['is_active'] === false;
+
+                if ($deactivating) {
+                    $otherActiveSuperAdmins = User::whereKeyNot($user->id)
+                        ->where('is_active', true)
+                        ->whereHas('roles', function ($q) use ($superAdminRoleId) {
+                            $q->where('roles.id', $superAdminRoleId);
+                        })
+                        ->lockForUpdate()
+                        ->count();
+
+                    if ($otherActiveSuperAdmins === 0) {
+                        // Match your API style (controller response), like you did in manageRoles
+                        return $this->responseError(
+                            'user',
+                            __('forms.user.errors.unique_super_admin'),
+                            422
+                        );
+                    }
+                }
+            }
+            // ---------------------------------------------------------------------
+
+            if ($request->hasFile('avatar')) {
+                $this->uploadAndUpdateImage(
+                    $request->file('avatar'),
+                    $user->id,
+                    User::class,
+                    'avatar'
+                );
+            }
+
+            $user->update($data);
+
+            return $this->responseSuccess('users', $user->id, [
+                'user' => new UserResource($user)
+            ]);
+        });
+
+    } catch (\Throwable $e) {
+        Log::error('UserController@update error', [
+            'user_id' => $user->id,
+            'error' => $e->getMessage(),
+        ]);
+
+        return $this->responseError(__('forms.common.errors.default'), 500);
     }
+}
+
 
     public function destroy(string $lang, User $user): JsonResponse
     {
