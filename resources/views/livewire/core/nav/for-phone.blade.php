@@ -3,7 +3,7 @@
         <h2 id="main-nav-phone" class="sr-only">
             Main navigation
         </h2>
-        <ol class="nav__items">
+        <ul class="nav__items">
             @auth
 
                 <x-core.nav.link route="index" :label="__('pages.landing_page.name')" />
@@ -34,15 +34,17 @@
                 {{-- <x-core.nav.link route="register" :label="__('pages.register.name')" /> --}}
             @endguest
 
-        </ol>
-        <livewire:core.lang-menu wire:key="lmp" />
+                    <livewire:core.lang-menu wire:key="lmp" />
+            <livewire:core.color-picker wire:key="color-picker-phone" />
+        </ul>
+
     </nav>
 @else
     <nav class="nav--phone" aria-labelledby="main-nav-phone">
         <h2 id="main-nav-phone" class="sr-only">
             Main navigation
         </h2>
-        <ol class="nav__items">
+        <ul class="nav__items">
             @auth
 
                 <x-core.nav.link route="#hero" :label="__('pages.landing_page.links.hero')" />
@@ -78,8 +80,10 @@
                 {{-- <x-core.nav.link route="register" :label="__('pages.register.name')" /> --}}
             @endguest
 
-        </ol>
-        <livewire:core.lang-menu wire:key="lmp" />
+                    <livewire:core.lang-menu wire:key="lmp" />
+          <livewire:core.color-picker wire:key="color-picker-phone" />
+        </ul>
+
     </nav>
 
 

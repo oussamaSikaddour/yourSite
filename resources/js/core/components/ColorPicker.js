@@ -1,5 +1,5 @@
-import { dispatchCustomEvent } from "../utils/DespatchCustomEvent";
-import { handleKeyEvents } from "../utils/KeyEventHandlers";
+import { dispatchCustomEvent } from "../../utils/DespatchCustomEvent";
+import { handleKeyEvents } from "../../utils/KeyEventHandlers";
 
 // --------------------
 // Data

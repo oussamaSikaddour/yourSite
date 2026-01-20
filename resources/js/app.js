@@ -17,7 +17,7 @@ import ToolTip from "./core/components/Tooltip.js";
 import Table from "./core/components/Table.js";
 import Modal from "./core/components/Modal.js";
 import Dialog from "./core/components/Dialog.js";
-import Slider from "./core/components/Sidebar.js"
+import Slider from "./core/components/Slider.js"
 
 // ------------------------------------------------------
 // Form Helpers

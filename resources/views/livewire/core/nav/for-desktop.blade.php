@@ -45,6 +45,7 @@
             @endguest
 
             <livewire:core.lang-menu wire:key="lang-menu-desktop" />
+              <livewire:core.color-picker wire:key="color-picker-desktop" />
         </nav>
     </header>
 @else
@@ -107,6 +108,7 @@
             @endguest
 
             <livewire:core.lang-menu wire:key="lang-menu-desktop" />
+            <livewire:core.color-picker wire:key="color-picker-desktop" />
         </nav>
     </header>
 
