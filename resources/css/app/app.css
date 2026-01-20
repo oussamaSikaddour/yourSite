@@ -3760,7 +3760,8 @@ input[type=radio]:checked:disabled + label::before {
   pointer-events: auto;
 }
 .modal .table__container {
-  min-height: 45vh;
+  min-height: -moz-fit-content;
+  min-height: fit-content;
   max-width: 98%;
   max-height: 90vh;
   overflow: auto;
