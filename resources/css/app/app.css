@@ -169,6 +169,10 @@ html:focus-within {
   background: var(--clr-bg-dark);
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   min-height: 100vh;
   font-family: var(--ff);
@@ -5156,9 +5160,6 @@ svg {
   max-height: -moz-fit-content;
   max-height: fit-content;
   padding: 3rem;
-  /* ✅ FIX: border-color needs a border to show */
-  border: var(--border);
-  border-color: var(--clr-primary);
   border-radius: var(--br);
   overflow: hidden;
   /* ✅ smoother + more pro: animate only what changes */
