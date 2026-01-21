@@ -1678,6 +1678,12 @@ input[type=radio]:checked:disabled + label::before {
   background-color: var(--clr-light);
   border-bottom: var(--border);
   padding: var(--space-6, 1.5rem);
+  padding-top: 6rem;
+}
+@media (min-width: 48em) {
+  .container__header {
+    padding-top: var(--space-6, 1.5rem);
+  }
 }
 .container__header__top, .container__header__bottom {
   display: flex;
