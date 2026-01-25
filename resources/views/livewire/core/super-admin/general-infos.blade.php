@@ -1,6 +1,11 @@
 <div class="form__container">
     <form class="form">
 
+        <div class="column center">
+        <p>@lang('forms.general_infos.theme_color') :</p>
+        <livewire:core.admin-color-picker  :$gSetting/>
+        </div>
+
         {{-- General Information --}}
         <div class="row ">
             <x-core.form.input model="form.app_name" :label="__('forms.general_infos.app_name')" type="text" html_id="FL-appN" />

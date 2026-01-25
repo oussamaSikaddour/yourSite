@@ -7,6 +7,7 @@ use App\Models\GeneralSetting;
 use App\Models\Image;
 use App\Traits\Core\Common\GeneralTrait;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
@@ -30,6 +31,15 @@ class GeneralInfos extends Component
                 $this->dispatch('open-errors', __('forms.common.errors.img.not_img'));
             }
         }
+    }
+
+
+    #[On('set_manage_form_theme_color')]
+    public function setThemeColor($color)
+    {
+            $this->form->fill([
+                'theme_color' => $color,
+            ]);
     }
 
     public function mount(): void
@@ -59,6 +69,7 @@ class GeneralInfos extends Component
                 'address_ar'  => $this->gSetting->address_ar,
                 'address_en'  => $this->gSetting->address_en,
                 'map'         => $this->gSetting->map,
+                'theme_color' => $this->gSetting->theme_color,
                 'inaugural_year'=> $this->gSetting->inaugural_year,
                 'youtube'   => $this->gSetting->youtube,
                 'facebook'  => $this->gSetting->facebook,

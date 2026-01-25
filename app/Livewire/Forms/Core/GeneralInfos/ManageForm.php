@@ -32,6 +32,7 @@ class ManageForm extends Form
     public $map;
     public $logo;
     public $inaugural_year;
+    public $theme_color;
     // Social links (all fillable from model)
     public $youtube;
     public $facebook;
@@ -95,6 +96,18 @@ class ManageForm extends Form
                 'integer',
                 Rule::in(range(1962, date('Y'))),
             ],
+            'theme_color' => ['required', 'string', Rule::in([
+                'default',
+                'emerald',
+                'gold',
+                'lime',
+                'ocean',
+                'rose',
+                'sky',
+                'slate',
+                'sunset',
+                'violet'
+            ])],
             // Socials (all urls, optional unique)
             'youtube'   => $socialUrl('youtube'),
             'facebook'  => $socialUrl('facebook'),
@@ -133,6 +146,7 @@ class ManageForm extends Form
             'address_en',
             'map',
             'logo',
+            "theme_color",
             'maintenance',
             'youtube',
             'facebook',
@@ -178,6 +192,8 @@ class ManageForm extends Form
     {
         try {
             $data = $this->validate();
+
+
 
             return DB::transaction(function () use ($data, $gSetting) {
                 // Upload logo if provided (handles create/update)

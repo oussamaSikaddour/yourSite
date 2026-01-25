@@ -146,6 +146,7 @@ return [
         'phone' => "Téléphone principal",
         'landline' => "Numéro de fixe",
         'fax' => "Numéro de fax",
+        "theme_color" => "Couleur du thème",
         'map' => "Localisation Google Maps",
         'youtube' => "YouTube",
         'facebook' => "Facebook",
@@ -245,7 +246,9 @@ return [
         ],
     ],
     "user" => [
-
+        'instructions' => [
+            "email" => "Email valide requis. Un code de vérification sera envoyé à cette adresse.",
+        ],
         'email' => "Email",
         "name" => "Nom d'utilisateur",
         'is_active' => 'Statut du compte',

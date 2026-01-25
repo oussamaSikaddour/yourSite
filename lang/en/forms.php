@@ -144,7 +144,10 @@ return [
         'logo' => "Institution Logo",
         'phone' => "Primary Phone",
         'landline' => "Landline Number",
+
         'fax' => "Fax Number",
+        "theme_color"=>"Theme Color",
+
         'map' => "Google Maps Location",
         'youtube' => "YouTube",
         'facebook' => "Facebook",
@@ -257,7 +260,8 @@ return [
         "password" => "Password",
         "person_id" => "Personnel",
         "avatar" => "Avatar",
-        "errors"=>[
+
+        "errors" => [
             'unique_super_admin' => "You can't deactivate this user because this is the last active super admin user.",
 
         ],
@@ -277,8 +281,9 @@ return [
             'roles_array'      => 'Roles must be provided as valid identifiers',
             'roles_exist'      => 'One or more specified roles are invalid',
             'user_not_found'   => 'The requested user account was not found',
-            'error_title'      => 'Role Assignment Error',
             'unique_super_admin' => "You can't remove super admin role for this user because this is the last super admin user.",
+
+            'error_title'      => 'Role Assignment Error',
         ],
         'responses' => [
             'success'      => 'User roles have been successfully updated',

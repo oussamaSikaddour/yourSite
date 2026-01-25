@@ -32,6 +32,7 @@ class GeneralSetting extends Model
         'address_en',
         'map',
         'maintenance',
+         'theme_color',
         'inaugural_year',
         'youtube',
         'facebook',
@@ -65,7 +66,8 @@ class GeneralSetting extends Model
         'logo_url',
         'address',
         'has_logo',
-        'formatted_phone'
+        'formatted_phone',
+        'theme_color_class',
     ];
 
 
@@ -93,7 +95,11 @@ class GeneralSetting extends Model
 
     public function getLogoUrlAttribute(): string
     {
-        return $this->logo?->url ?? asset('assets/app/images/logo.png');
+        return $this->logo?->url ?? asset('assets/app/images/Logo.png');
+    }
+    public function getThemeColorClassAttribute(): string
+    {
+        return $this->theme_color !='default'? $this->theme_color:'';
     }
 
     public function getHasLogoAttribute(): bool

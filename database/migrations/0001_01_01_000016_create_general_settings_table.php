@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->year('inaugural_year')->nullable();
+
+           $table->enum('theme_color', ['default','emerald','gold','lime','ocean','rose','sky','slate','sunset','violet'])->default('default');
             $table->string('youtube')->nullable();
             $table->string('facebook')->nullable();
             $table->string('linkedin')->nullable();
