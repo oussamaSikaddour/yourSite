@@ -3096,7 +3096,6 @@ input[type=radio]:checked:disabled + label::before {
   background-color: var(--clr-light);
   padding: var(--space-2, 0.5rem);
   display: flex;
-  align-self: center;
   justify-content: center;
   align-items: flex-start;
   border: var(--border);
@@ -3141,7 +3140,7 @@ input[type=radio]:checked:disabled + label::before {
   gap: var(--space-8, 2rem);
 }
 .form > div {
-  min-width: calc(100% - 1rem);
+  max-width: calc(100% - 1rem);
 }
 .form a {
   font-size: var(--fs);
@@ -3167,8 +3166,10 @@ input[type=radio]:checked:disabled + label::before {
   box-shadow: none;
 }
 .form__actions {
+  max-width: 100% !important;
   overflow: hidden;
   display: flex;
+  width: 100%;
   align-items: center;
   flex-direction: row-reverse;
   justify-content: space-between;
@@ -3177,7 +3178,9 @@ input[type=radio]:checked:disabled + label::before {
 
 .choices {
   display: flex;
+  width: 100%;
   overflow-x: auto;
+  justify-content: flex-start;
   scrollbar-gutter: stable;
 }
 
@@ -3487,6 +3490,7 @@ input[type=radio]:checked:disabled + label::before {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  overflow: hidden;
   overflow-y: auto;
   background-color: inherit;
   scrollbar-gutter: stable;

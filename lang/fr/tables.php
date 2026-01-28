@@ -38,28 +38,30 @@ return [
             ]
         ]
     ],
-    'persons' => [
-        "info" => "Registre du personnel",
-        "empty" => "Aucun dossier personnel trouvé",
-        "full_name" => "Nom complet",
-        "full_name_fr" => "Nom complet (FR)",
-        "full_name_ar" => "Nom complet (AR)",
-        "employee_number" => "Identifiant employé",
-        "social_number" => "Numéro de sécurité sociale",
-        "email" => "Email officiel",
-        "registration_date" => "Date d'enregistrement",
-        "phone" => "Téléphone",
-        "card_number" => "Numéro national d'identité",
-        "birth_date" => "Date de naissance",
-        "birth_place_fr" => "Lieu de naissance (FR)",
-        "birth_place_ar" => "Lieu de naissance (AR)",
-        "birth_place_en" => "Lieu de naissance (EN)",
-        "excel" => [
-            "upload" => [
-                "success" => "Dossiers du personnel importés avec succès"
-            ]
+'persons' => [
+    "info" => "Registre du personnel",
+    "empty" => "Aucun dossier personnel trouvé",
+    "full_name" => "Nom complet",
+    "full_name_fr" => "Nom complet (FR)",
+    "full_name_ar" => "Nom complet (AR)",
+    "employee_number" => "Identifiant employé",
+    "social_number" => "Numéro de sécurité sociale",
+    "email" => "Email officiel",
+    "registration_date" => "Date d'enregistrement",
+    "phone" => "Téléphone",
+    "card_number" => "Numéro national d'identité",
+    "bank_acronym" => "Banque",
+    "bank_account" => "Compte bancaire",
+    "birth_date" => "Date de naissance",
+    "birth_place_fr" => "Lieu de naissance (FR)",
+    "birth_place_ar" => "Lieu de naissance (AR)",
+    "birth_place_en" => "Lieu de naissance (EN)",
+    "excel" => [
+        "upload" => [
+            "success" => "Dossiers du personnel importés avec succès"
         ]
-    ],
+    ]
+],
     'our_qualities' => [
         'info' => 'Liste de nos qualités',
         'not_found' => 'Aucune qualité trouvée pour le moment',

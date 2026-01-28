@@ -1,80 +1,72 @@
-// resources/js/components/admin/AdminColorPicker.js
-
 import { dispatchCustomEvent } from "../../utils/DespatchCustomEvent";
+import { THEME } from "./ThemeManager";
 
-const STORAGE_KEY = "theme-color-class";
-const DEFAULT_THEME = "default";
+const LEGACY_KEY = "theme-color-class"; // 👈 your old key
 
-const ALLOWED_THEMES = [
-  "default", "emerald", "gold", "lime", "ocean",
-  "rose", "sky", "slate", "sunset", "violet",
-];
-
-const sanitizeTheme = (theme) => {
-  theme = (theme ?? "").toString().toLowerCase().trim();
-  return ALLOWED_THEMES.includes(theme) ? theme : "";
-};
-
-const getThemeColorFromStorage = () => {
-  return sanitizeTheme(localStorage.getItem(STORAGE_KEY));
-};
-
-const saveThemeColorToStorage = (theme) => {
-  localStorage.setItem(STORAGE_KEY, theme);
-};
-
-const setThemeClassOnRoot = (theme) => {
-  const root = document.documentElement;
-  const safe = ALLOWED_THEMES.includes(theme) ? theme : DEFAULT_THEME;
-
-  // remove all theme classes first
-  root.classList.remove(...ALLOWED_THEMES);
-
-  // ✅ only add class if NOT default
-  if (safe !== DEFAULT_THEME) {
-    root.classList.add(safe);
-  }
-};
 const setActiveButton = (picker, theme) => {
 
 
-  const safe = theme && ALLOWED_THEMES.includes(theme) ? theme : DEFAULT_THEME;
+  const safe = THEME.ALLOWED.includes(theme) ? theme : THEME.DEFAULT;
+
   picker.querySelectorAll(".admin__color__btn").forEach((b) => {
     const btnTheme = (b.dataset.theme || "").toLowerCase().trim();
     b.classList.toggle("active", btnTheme === safe);
   });
 };
 
+const getLegacyTheme = () => {
+  const legacy = THEME.sanitize(localStorage.getItem(LEGACY_KEY));
+  return legacy || "";
+};
+
 export default function AdminColorPicker() {
   const picker = document.querySelector(".admin__color__picker");
   if (!picker) return;
 
-  // DB raw value (empty string means "not set")
-  const dbThemeRaw = sanitizeTheme(picker.dataset.dbTheme); // returns "" if invalid/empty
-  const storedTheme = getThemeColorFromStorage();           // "" if missing/invalid
+  // avoid double binding after Livewire morph
+  if (picker.dataset.initialized === "1") return;
+  picker.dataset.initialized = "1";
 
-  // ✅ Priority: DB (if set) > localStorage (if set) > default
-  const finalTheme =
-    (dbThemeRaw !== "" ? dbThemeRaw : (storedTheme !== "" ? storedTheme : DEFAULT_THEME));
+  // 1) DB theme from blade
+  const dbTheme = THEME.sanitize(picker.dataset.dbTheme);
 
-  setThemeClassOnRoot(finalTheme);
-  setActiveButton(picker, finalTheme);
+  // 2) Global from new storage
+  const storedGlobal = THEME.getGlobal();
 
-  // sync Livewire on init
-  dispatchCustomEvent("admin-color-init", { themeColor: finalTheme });
+  // 3) Legacy from old storage
+  const legacy = getLegacyTheme();
+
+  // ✅ ACTIVE should reflect GLOBAL source (DB > storedGlobal > legacy > default)
+const globalTheme = storedGlobal || dbTheme || legacy || THEME.DEFAULT;
+
+
+  // ✅ Cache DB as global if present (keeps storage consistent)
+  if (dbTheme) THEME.setGlobal(dbTheme);
+
+  // Ensure DOM is ready (especially in modals)
+  requestAnimationFrame(() => {
+    setActiveButton(picker, globalTheme);
+  });
+
+  // Still sync the actual site theme (user override may win)
+  THEME.sync();
 
   const handleClick = (e) => {
+
+    localStorage.removeItem('user-theme-color-class')
     const btn = e.target.closest(".admin__color__btn");
     if (!btn || !picker.contains(btn)) return;
 
-    const theme = (btn.dataset.theme || "").toLowerCase().trim();
-    const safe = ALLOWED_THEMES.includes(theme) ? theme : DEFAULT_THEME;
+    const theme = THEME.sanitize(btn.dataset.theme) || THEME.DEFAULT;
 
-    setThemeClassOnRoot(safe);
-    setActiveButton(picker, safe);
+    // admin changes GLOBAL
+    THEME.setGlobal(theme);
 
-    saveThemeColorToStorage(safe);
-    dispatchCustomEvent("admin-color-change", { themeColor: safe });
+    // ✅ ACTIVE = GLOBAL immediately
+    setActiveButton(picker, theme);
+
+    // notify Livewire form (save to DB)
+    dispatchCustomEvent("admin-color-change", { themeColor: theme });
   };
 
   picker.addEventListener("click", handleClick);

@@ -52,6 +52,8 @@ return [
         "registration_date" => "Registration Date",
         "phone" => "Phone",
         "card_number" => "National ID",
+         "bank_acronym"=>"Bank",
+        "bank_account"=>"Bank Account",
         "birth_date" => "Birth Date",
         "birth_place_fr" => "Birth Place (FR)",
         "birth_place_ar" => "Birth Place (AR)",

@@ -10,10 +10,15 @@
 
         </div>
     </div>
+
+    <div class="row center">
+
+
     <div class="form__container small forMultiForm forget-password-multi-form-step">
         <div class="forms fpForms">
             <livewire:core.guest.forgot-password.first-step wire:key="fp-f-s" />
             <livewire:core.guest.forgot-password.last-step wire:key="fp-l-s" />
         </div>
     </div>
+        </div>
 @endsection

@@ -18,6 +18,7 @@ import Table from "./core/components/Table.js";
 import Modal from "./core/components/Modal.js";
 import Dialog from "./core/components/Dialog.js";
 import Slider from "./core/components/Slider.js"
+import { THEME } from "./core/components/ThemeManager.js";
 
 // ------------------------------------------------------
 // Form Helpers
@@ -50,7 +51,6 @@ import { on } from "./utils/DespatchCustomEvent.js";
 
 import LandingPageNavigation from "./app/LandingPageNavigation.js";
 import Carousel from "./app/Carsoule.js";
-import InfiniteScroll from "./app/InfiniteScroll.js";
 import Counter from "./app/Counter.js";
 // ------------------------------------------------------
 // Safe Initializer Helper
@@ -83,8 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     safeRun(Navigation);
     safeRun(Sidebar);
     safeRun(Lang);
-    safeRun(AdminColorPicker)
-    safeRun(ColorPicker)
+
 
     // UI Widgets
     safeRun(Accordion);
@@ -187,3 +186,12 @@ on("services__is__animated", () => {
 });
 
 
+
+on("init_theme_color", (e) => {
+  // e.detail style depends on your dispatch helper
+  const themeFromDb = (e?.detail?.themeColor ?? e?.[0] ?? "default");
+  THEME.setGlobal(themeFromDb);  // stores + syncs final (user override still wins)
+
+  safeRun(ColorPicker);
+  safeRun(AdminColorPicker);
+});

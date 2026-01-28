@@ -8,7 +8,9 @@
             <h2>@lang('pages.login.titles.main')</h2>
         </div>
     </div>
+    <div class="row center">
     <div class="form__container small ">
         <livewire:core.guest.login />
+    </div>
     </div>
 @endsection

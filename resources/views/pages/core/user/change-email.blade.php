@@ -8,7 +8,11 @@
         </div>
 
     </div>
+    <div class="row center">
+
+
     <div class="form__container small">
         <livewire:core.user.change-mail />
     </div>
+        </div>
 @endsection
