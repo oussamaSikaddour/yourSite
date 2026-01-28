@@ -21,9 +21,7 @@
 
 @script
 <script>
-document.addEventListener('admin-color-init', function(event) {
-  @this.applyThemeColorFromStorage(event?.detail ?? {});
-});
+
 
 document.addEventListener('admin-color-change', function(event) {
   @this.setThemeColor(event?.detail?.themeColor ?? 'default');

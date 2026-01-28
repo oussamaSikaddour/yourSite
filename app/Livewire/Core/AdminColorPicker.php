@@ -28,16 +28,9 @@ class AdminColorPicker extends Component
         $db = strtolower($this->gSetting->theme_color ?? '');
         $initial = $db !== '' && in_array($db, $this->allowedColors, true) ? $db : 'default';
         $this->color = $initial;
-    $this->dispatch('admin-color-init', themeColor: $this->color);
+
     }
 
-    #[On('admin-color-init')]
-    public function applyThemeColorFromStorage(array $payload = []): void
-    {
-        $color = strtolower($payload['themeColor'] ?? 'default');
-        $color = in_array($color, $this->allowedColors, true) ? $color : 'default';
-        $this->color = $color;
-    }
 
     public function setThemeColor(string $color): void
     {
