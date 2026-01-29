@@ -15,7 +15,6 @@ import Combobox from "./core/components/Combobox.js";
 import Tabs from "./core/components/Tabs.js";
 import ToolTip from "./core/components/Tooltip.js";
 import Table from "./core/components/Table.js";
-import Modal from "./core/components/Modal.js";
 import Dialog from "./core/components/Dialog.js";
 import Slider from "./core/components/Slider.js"
 import { THEME } from "./core/components/ThemeManager.js";
@@ -89,7 +88,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     safeRun(Accordion);
     safeRun(Combobox);
     safeRun(Tabs);
-    safeRun(Modal);
     safeRun(Dialog);
     safeRun(ToolTip);
     safeRun(Table);
