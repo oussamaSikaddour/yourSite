@@ -99,11 +99,15 @@ class ArticlesTable extends Component
 
 
 
+
     #[On("selected-value-updated")]
-    public function changeArticleState(Article $article, $value)
+    public function changeArticleState(Article $article,string $value)
     {
+
+
         try {
             $article->update(['state' => $value]);
+
         } catch (\Exception $e) {
             $this->dispatch('open-errors', __('forms.common.errors.default'));
         }
