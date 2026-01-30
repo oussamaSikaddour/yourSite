@@ -76,8 +76,9 @@
                             </td>
                             <td scope="row">{{ $trend->localized_title }}</td>
                             <td>
-                                <livewire:core.table-selector wire:key="st-P-{{ $trend->id }}" :data="$stateOptions"
-                                    :selectedValue="$trend->state" :entity="$trend" lazy />
+                                <livewire:core.table-selector wire:key="ts-trend-{{ $trend->id }}" :data="$stateOptions"
+                                    :selectedValue="$trend->state" :entityId="$trend->id" lazy />
+
                             </td>
                             <td>{{ $trend->created_at->format('Y-m-d') }}</td>
 

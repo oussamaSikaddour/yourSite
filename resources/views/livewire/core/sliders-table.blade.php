@@ -83,8 +83,8 @@
                             <td>{{ $slider->creator }}</td>
                             <td>{{ $slider->position }}</td>
                             <td>
-                                <livewire:core.table-selector wire:key="slid-P-{{ $slider->id }}" :data="$stateOptions"
-                                    :selectedValue="$slider->state" :entity="$slider" lazy />
+                                <livewire:core.table-selector wire:key="ts-slider-{{ $slider->id }}"
+                                    :data="$stateOptions" :selectedValue="$slider->state" :entityId="$slider->id" lazy />
                             </td>
                             <td>{{ $slider->created_at->format('Y-m-d') }}</td>
 

@@ -85,17 +85,17 @@ class SlidersTable extends Component
         return $query->paginate($this->perPage);
     }
 
-    /** Change slider state dynamically */
-    #[On('selected-value-updated')]
-    public function changeSliderState(Slider $slider, string $value): void
-    {
-        try {
-            $slider->update(['state' => $value]);
-        } catch (\Throwable $e) {
-            Log::error('Error updating slider state:', ['message' => $e->getMessage()]);
-            $this->dispatch('open-errors', __('forms.common.errors.default'));
-        }
+
+#[On("selected-value-updated")]
+public function changeArticleState(int|string $sliderId, string $value): void
+{
+    try {
+    Slider::whereKey($sliderId)->update(['state' => $value]); // UPDATE only
+    } catch (\Throwable $e) {
+        Log::error('Error updating slider state: ' . $e->getMessage());
+        $this->dispatch('open-errors', __('forms.common.errors.default'));
     }
+}
 
     /** Delete a slider */
     #[On('delete-slider')]

@@ -7,6 +7,7 @@ use App\Models\OurQuality;
 use App\Traits\Core\Common\GeneralTrait;
 use App\Traits\Core\Common\ModelImageTrait;
 use App\Traits\Core\Common\TableTrait;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
@@ -61,24 +62,59 @@ class OurQualitiesTable extends Component
                      ->paginate($this->perPage);
     }
 
-    /**
-     * Change the status of a given OurQuality entity.
-     */
-    #[On("selected-value-updated")]
-    public function changeStatusForOurQuality(OurQuality $entity, $value)
-    {
-        try {
-            $activeCount = OurQuality::where('is_active', '1')->count();
-            if ($activeCount <= 3 || $value === "0") {
-                $entity->update(['is_active' => $value]);
-            } else {
-                $this->dispatch('selected-value-reset', $entity->id, 0);
-                throw new \Exception(__("tables.our_qualities.errors.active_limit"));
+
+
+#[On("selected-value-updated")]
+public function changeArticleState(int|string $ourQualityId, string $value): void
+{
+    // normalize incoming value (you seem to use "0"/"1")
+    $value = $value === '1' ? '1' : '0';
+
+    try {
+        DB::transaction(function () use ($ourQualityId, $value) {
+
+            // Lock the row to ensure consistent decision-making under concurrency
+            $selected = OurQuality::query()
+                ->whereKey($ourQualityId)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$selected) {
+                $this->dispatch('open-errors', __('forms.common.errors.default'));
+                return;
             }
-        } catch (\Exception $e) {
-            $this->dispatch('open-errors', __('forms.common.errors.default'));
-        }
+
+            // If disabling, always allow (fast path: no counting)
+            if ($value === '0') {
+                OurQuality::whereKey($ourQualityId)->update(['is_active' => '0']);
+                return;
+            }
+
+            // If already active and user selects active again, do nothing
+            if ((string) $selected->is_active === '1') {
+                return;
+            }
+
+            // Activating: enforce max 3 actives
+            $activeCount = OurQuality::query()
+                ->where('is_active', '1')
+                ->lockForUpdate()
+                ->count();
+
+            if ($activeCount < 3) {
+                OurQuality::whereKey($ourQualityId)->update(['is_active' => '1']);
+                return;
+            }
+
+            // Limit reached: reset UI and show error
+            $this->dispatch('selected-value-reset', $ourQualityId, '0');
+            $this->dispatch('open-errors', __("tables.our_qualities.errors.active_limit"));
+        });
+    } catch (\Throwable $e) {
+        Log::error('Error updating ourQuality state: ' . $e->getMessage());
+        $this->dispatch('open-errors', __('forms.common.errors.default'));
     }
+}
 
     /**
      * Delete an OurQuality entity and its associated images.

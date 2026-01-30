@@ -64,15 +64,16 @@ class MenusTable extends Component
 
 
 
-    #[On("selected-value-updated")]
-    public function changeMenuState(Menu $menu, $value)
-    {
-        try {
-            $menu->update(['state' => $value]);
-        } catch (\Exception $e) {
-            $this->dispatch('open-errors', __('forms.common.errors.default'));
-        }
+#[On("selected-value-updated")]
+public function changeArticleState(int|string $menuId, string $value): void
+{
+    try {
+        Menu::whereKey($menuId)->update(['state' => $value]); // UPDATE only
+    } catch (\Throwable $e) {
+        Log::error('Error updating article state: ' . $e->getMessage());
+        $this->dispatch('open-errors', __('forms.common.errors.default'));
     }
+}
 
 
     /**

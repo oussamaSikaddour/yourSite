@@ -85,8 +85,9 @@
                             </td>
                             <td scope="row">{{ $menu->title }}</td>
                             <td>
-                                <livewire:core.table-selector wire:key="st-P-{{ $menu->id }}" :data="$stateOptions"
-                                    :selectedValue="$menu->state" :entity="$menu" lazy />
+                                <livewire:core.table-selector wire:key="ts-M-{{ $menu->id }}" :data="$stateOptions"
+                                    :selectedValue="$menu->state" :entityId="$menu->id" lazy />
+
                             </td>
                             <td>{{ $menu->created_at->format('Y-m-d') }}</td>
 

@@ -1,4 +1,3 @@
-
 <div class="select__group">
     <div>
         <label for="{{ $htmlId }}"></label>

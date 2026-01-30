@@ -100,18 +100,17 @@ class ArticlesTable extends Component
 
 
 
-    #[On("selected-value-updated")]
-    public function changeArticleState(Article $article,string $value)
-    {
-
-
-        try {
-            $article->update(['state' => $value]);
-
-        } catch (\Exception $e) {
-            $this->dispatch('open-errors', __('forms.common.errors.default'));
-        }
+#[On("selected-value-updated")]
+public function changeArticleState(int|string $articleId, string $value): void
+{
+    try {
+        Article::whereKey($articleId)->update(['state' => $value]); // UPDATE only
+    } catch (\Throwable $e) {
+        Log::error('Error updating article state: ' . $e->getMessage());
+        $this->dispatch('open-errors', __('forms.common.errors.default'));
     }
+}
+
 
     #[On("delete-article")]
     public function deleteMenu(Article $article)

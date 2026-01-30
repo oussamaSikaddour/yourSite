@@ -64,36 +64,25 @@
                     @foreach ($this->articles as $article)
                         <tr wire:key="{{ $article->id }}-gt">
                             <td>
-                                    <x-core.button
-                                    variant="danger"
-                                    icon="delete"
-                                    function="openDeleteDialog"
-                                    :parameters="[$article]"
-                                     rounded=true
-                                     hasTooltip=true
-                                     :tooltip="__('toolTips.article.delete')"
-                                     />
+                                <x-core.button variant="danger" icon="delete" function="openDeleteDialog"
+                                    :parameters="[$article]" rounded=true hasTooltip=true :tooltip="__('toolTips.article.delete')" />
 
 
                                 <livewire:core.open-modal-button wire:key="edit-aR-{{ $article->id }}" rounded=true
-                                    hasTooltip=true
-                                    icon="edit"
-                                    :tooltip="__('toolTips.article.update')"
-                                     modalTitle="modals.article.actions.update"
-                                     :modalTitleOptions="['title'=>$article->title]"
-                                    :modalContent="[
+                                    hasTooltip=true icon="edit" :tooltip="__('toolTips.article.update')"
+                                    modalTitle="modals.article.actions.update" :modalTitleOptions="['title' => $article->title]" :modalContent="[
                                         'name' => 'core.author.article-modal',
                                         'parameters' => ['id' => $article->id],
-                                        ]"
-                                     :containsTinyMce=true
-                                     />
+                                    ]"
+                                    :containsTinyMce=true />
 
                             </td>
                             <td scope="row">{{ $article->title }}</td>
                             <td>{{ $article->author }}</td>
                             <td>
-                                <livewire:core.table-selector wire:key="art-P-{{ $article->id }}" :data="$stateOptions"
-                                    :selectedValue="$article->state" :entity="$article" lazy />
+                                <livewire:core.table-selector wire:key="ts-article-{{ $article->id }}" :data="$stateOptions"
+                                    :selectedValue="$article->state" :entityId="$article->id" lazy />
+
                             </td>
                             <td>{{ $article->created_at->format('Y-m-d') }}</td>
 
