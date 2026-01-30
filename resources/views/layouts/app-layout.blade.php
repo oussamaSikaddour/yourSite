@@ -41,6 +41,7 @@
     </main>
     <livewire:app.footer />
     <livewire:core.toast />
+     <x-core.page-loader/>
 </body>
 
 </html>

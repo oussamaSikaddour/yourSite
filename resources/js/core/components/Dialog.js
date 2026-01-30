@@ -1,59 +1,38 @@
 import { toggleInertForAllExceptOpenedElement } from "../../utils/Inert";
-import { setAriaAttributes } from "../../utils/Aria";
-import { dispatchCustomEvent, on } from "../../utils/DespatchCustomEvent";
+import { on } from "../../utils/DespatchCustomEvent";
 
-// ---- OPEN ----
-const openDialog = (dialog, closeBtn) => {
-    if (dialog.classList.contains("open")) return;
-
-    dialog.classList.add("open");
-    setAriaAttributes(false, "0", dialog);
-    toggleInertForAllExceptOpenedElement(dialog, "open");
-
-    if (closeBtn) closeBtn.focus();
-};
-
-// ---- CLOSE ----
-const closeDialog = (dialog) => {
-    if (!dialog.classList.contains("open")) return;
-
-    // Move focus outside BEFORE hiding dialog
-    document.body.focus(); // this prevents the aria-hidden/focus error
-
-    dialog.classList.remove("open");
-    setAriaAttributes(true, "-1", dialog);
-    toggleInertForAllExceptOpenedElement(dialog, "open");
-
-    dispatchCustomEvent("close-dialog");
-};
-
-// ---- INITIALIZE ----
 const Dialog = () => {
-    const dialog = document.querySelector(".dialog");
-    const closeButton = document.querySelector(".dialog__closer");
+  const dialog = document.querySelector("#box");
+  if (!dialog) return;
 
-    if (!dialog || !closeButton) return;
+  const applyInertNow = () => {
+    toggleInertForAllExceptOpenedElement(dialog, "open");
 
-    // Open dialog via custom event
-    on("add-open-to-dialog", () => openDialog(dialog, closeButton));
+    const isOpen = dialog.classList.contains("open");
+    const bodyChildren = Array.from(document.body.children);
 
-    // Close button
-    closeButton.addEventListener("click", () => closeDialog(dialog));
+    bodyChildren.forEach((el) => {
+      if (el === dialog) return;
 
-    on("dialog-will-be-close",()=>closeDialog(dialog))
-    // Optional: ESC key closes dialog
-    document.addEventListener("keydown", e => {
-        if (e.key === "Escape" && dialog.classList.contains("open")) {
-            closeDialog(dialog);
-        }
+      if (isOpen) el.setAttribute("aria-hidden", "true");
+      else el.removeAttribute("aria-hidden");
     });
 
-    // Optional: click outside closes dialog
-    document.addEventListener("click", e => {
-        if (!dialog.contains(e.target) && dialog.classList.contains("open")) {
-            closeDialog(dialog);
-        }
-    });
+    if (isOpen) {
+      const btn = dialog.querySelector(".dialog__closer");
+      if (btn) btn.focus();
+    }
+  };
+
+  const applyInertAfterDomSettles = () => {
+    queueMicrotask(() => requestAnimationFrame(applyInertNow));
+  };
+
+  // Livewire browser event
+  on("dialog-sync-inert", applyInertAfterDomSettles);
+
+  // Safety on page load
+  applyInertAfterDomSettles();
 };
 
 export default Dialog;

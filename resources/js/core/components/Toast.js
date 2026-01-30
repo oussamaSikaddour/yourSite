@@ -1,74 +1,48 @@
-import { setAriaAttributes } from "../../utils/Aria";
-import { dispatchCustomEvent ,on} from "../../utils/DespatchCustomEvent";
+import { on } from "../../utils/DespatchCustomEvent";
 
-// Global auto-close timer
-let toastTimer = null;
+let timer = null;
 
-// ---------------------------
-// OPEN / CLOSE TOAST
-// ---------------------------
-const openToast = (toast, closeButton) => {
-  // Prevent multiple timers stacking
-  if (toastTimer) clearTimeout(toastTimer);
-
-  toast.classList.add("open");
-  setAriaAttributes(false, "0", toast);
-
-  // Focus the closer button for accessibility
-  closeButton.focus();
-
-  // auto-close after 6s
-  toastTimer = setTimeout(() => closeToast(toast), 6000);
-};
-
-const closeToast = (toast) => {
-  // Clear auto-close timer
-  if (toastTimer) {
-    clearTimeout(toastTimer);
-    toastTimer = null;
-  }
-
-
-  toast.classList.remove("open");
-  setAriaAttributes(true, "-1", toast);
-    dispatchCustomEvent("close-toast");
-};
-
-// ---------------------------
-// ELEMENTS
-// ---------------------------
-const getElements = () => {
-  const closeButton = document.querySelector(".toast__closer");
-
-  const toast = document.querySelector(".toast__container");
-  if ( !closeButton || !toast) return null;
-  return {  closeButton, toast };
-};
-
-// ---------------------------
-// MAIN SETUP
-// ---------------------------
 const Toast = () => {
-  const els = getElements();
-  if (!els) return;
+  const toast = document.querySelector("#coreToast");
+  if (!toast) return;
 
-  const {  closeButton, toast } = els;
+  const closeBtn = toast.querySelector(".toast__closer");
 
-  // manual close (button)
-  closeButton.addEventListener("click", () => closeToast(toast));
-
-  // click on the toast → close
-  toast.addEventListener("click", () => closeToast(toast));
-
-  // keyboard accessibility: Enter + Space
-  toast.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      closeToast(toast);
+  const clear = () => {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
     }
+  };
+
+  const scheduleClose = () => {
+    clear();
+
+    // focus close button for a11y (optional)
+    if (closeBtn) closeBtn.focus();
+
+    timer = setTimeout(() => {
+      // Tell Livewire to close
+      window.dispatchEvent(new CustomEvent("close-toast"));
+    }, 6000);
+  };
+
+  // Watch class changes from Livewire (open/close)
+  const observer = new MutationObserver(() => {
+    const isOpen = toast.classList.contains("open");
+    if (isOpen) scheduleClose();
+    else clear();
   });
 
+  observer.observe(toast, { attributes: true, attributeFilter: ["class"] });
 
-    on("set-toast-open", () => openToast(toast ,closeButton));
+  // initial state
+  if (toast.classList.contains("open")) scheduleClose();
+
+  // Hook Livewire close-toast event → component listens already
+  on("close-toast", () => {
+    clear();
+  });
 };
 
 export default Toast;

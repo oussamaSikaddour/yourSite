@@ -49,6 +49,7 @@ referrerpolicy="no-referrer">
     <livewire:core.modal />
     <livewire:core.dialog />
     <x-core.tooltip />
+     <x-core.page-loader/>
 </body>
 
 </html>

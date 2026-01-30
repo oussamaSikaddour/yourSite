@@ -5,50 +5,55 @@ namespace App\Livewire\Core;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class ErrorsHandler extends Component
+final class ErrorsHandler extends Component
 {
     public bool $isOpen = false;
     public array $errors = [];
 
-    // -------------------------
-    // EVENT : OPEN ERRORS PANEL
-    // -------------------------
-    #[On('open-errors')]
-    public function openErrors($errors)
-    {
+    // internal: sync inert after DOM update
+    public bool $needsInertSync = false;
 
+    #[On('open-errors')]
+    public function openErrors($errors): void
+    {
         $this->errors = $this->processErrors($errors);
         $this->isOpen = true;
 
-        $this->dispatch("errors-notifications", isOpen: true);
+        // apply inert AFTER DOM updates (when .open exists)
+        $this->needsInertSync = true;
     }
 
-    // -------------------------
-    // CLOSE ERRORS PANEL
-    // -------------------------
-    public function closeErrors()
+    public function closeErrors(): void
     {
         $this->isOpen = false;
         $this->errors = [];
 
-        $this->dispatch("handle-errors-state", isOpen: false);
+        // remove inert AFTER DOM updates (when .open removed)
+        $this->needsInertSync = true;
     }
 
+    public function rendered(): void
+    {
+        if (!$this->needsInertSync) {
+            return;
+        }
 
-    // -------------------------
-    // CLEAN & NORMALIZE ERRORS
-    // -------------------------
+        $this->needsInertSync = false;
+
+        // Browser event (ErrorsNotifications.js listens to it)
+        $this->dispatch('errors-sync-inert');
+    }
+
     private function processErrors($errors): array
     {
-        // Normalize string → array
         if (is_string($errors)) {
             $errors = explode("\n", $errors);
         }
 
         $processed = [];
 
-        foreach ($errors as $error) {
-            foreach (explode("\n", trim($error)) as $line) {
+        foreach ((array) $errors as $error) {
+            foreach (explode("\n", trim((string) $error)) as $line) {
                 $line = trim($line);
                 if ($line !== '') {
                     $processed[] = $line;
@@ -58,7 +63,6 @@ class ErrorsHandler extends Component
 
         return $processed;
     }
-
 
     public function render()
     {

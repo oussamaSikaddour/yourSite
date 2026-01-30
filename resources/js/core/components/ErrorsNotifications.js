@@ -1,45 +1,36 @@
-import { toggleInertForAllExceptOpenedElement } from '../../utils/Inert';
-import { dispatchCustomEvent } from '../../utils/DespatchCustomEvent';
-
-// --- ELEMENTS ---
-const getElements = () => {
-
-  const errorsContainer = document.querySelector(".errors__container");
-  const closeButton = errorsContainer?.querySelector(".errors__closer");
-
-  if ( !errorsContainer || !closeButton) return null;
-  return { errorsContainer, closeButton };
-};
-
-// --- OPEN / CLOSE ---
-const openErrors = (container, closeButton) => {
-  container.classList.add("open");
-  toggleInertForAllExceptOpenedElement(container, "open");
-  closeButton.focus();
-};
-
-const closeErrors = (container) => {
-  container.classList.remove("open");
-  toggleInertForAllExceptOpenedElement(container, "open");
-};
-
-// --- MAIN SETUP ---
+import { toggleInertForAllExceptOpenedElement } from "../../utils/Inert";
+import { on } from "../../utils/DespatchCustomEvent";
 const ErrorsNotifications = () => {
-  const els = getElements();
-  if (!els) return;
+  const container = document.querySelector("#coreErrors");
+  if (!container) return;
 
-  const { errorsContainer, closeButton } = els;
+  const applyInertNow = () => {
+    toggleInertForAllExceptOpenedElement(container, "open");
 
-  // Close: button click → close container
-  closeButton.addEventListener("click", () => {
-    closeErrors(errorsContainer);
-  });
+    const isOpen = container.classList.contains("open");
+    const bodyChildren = Array.from(document.body.children);
 
-  // Custom event → open container
-  document.addEventListener("errors-notifications", (e) => {
-    e.preventDefault();
-    openErrors(errorsContainer, closeButton);
-  });
+    bodyChildren.forEach((el) => {
+      if (el === container) return;
+
+      if (isOpen) el.setAttribute("aria-hidden", "true");
+      else el.removeAttribute("aria-hidden");
+    });
+
+    if (isOpen) {
+      const closeBtn = container.querySelector(".errors__closer");
+      if (closeBtn) closeBtn.focus();
+    }
+  };
+
+  const applyInertAfterDomSettles = () => {
+    queueMicrotask(() => requestAnimationFrame(applyInertNow));
+  };
+
+ on("errors-sync-inert", applyInertAfterDomSettles);
+
+  // safety on first load
+  applyInertAfterDomSettles();
 };
 
 export default ErrorsNotifications;
