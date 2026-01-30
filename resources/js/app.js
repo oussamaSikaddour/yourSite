@@ -37,6 +37,7 @@ import { manageFileInputs } from "./core/components/FileInputs.js";
 import ErrorsNotifications from "./core/components/ErrorsNotifications.js";
 import Toast from "./core/components/Toast.js";
 import Grid  from "./core/components/Grid.js";
+import Modal from './core/components/Modal.js'
 
 
 // ------------------------------------------------------
@@ -85,6 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     // UI Widgets
+    safeRun(Modal);
     safeRun(Accordion);
     safeRun(Combobox);
     safeRun(Tabs);

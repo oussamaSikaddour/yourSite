@@ -53,6 +53,8 @@
         console.log('test');
         initializeTinyMCE(@js($htmlId), @js($content), @js($viewOnly));
     });
+
+        window.addEventListener('tinymce-destroy-all', destroyEditor);
 })();
 </script>
 @endscript

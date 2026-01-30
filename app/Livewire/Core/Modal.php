@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Livewire\Core;
 
 use Livewire\Attributes\On;
@@ -19,11 +18,9 @@ final class Modal extends Component
 
     public bool $containsTinyMce = false;
 
-    // ✅ key changes every open => inner component remounts
     public int $modalInstance = 0;
 
-    // ✅ init once per open (after DOM exists)
-    private bool $initDispatchedForThisOpen = false;
+    public bool $needsInertSync = false;
 
     #[On('fill-modal')]
     public function openModal(array $data = []): void
@@ -35,32 +32,15 @@ final class Modal extends Component
         $this->containsTinyMce = (bool)   ($data['containsTinyMce'] ?? false);
 
         $this->isOpen = true;
-
-        // ✅ force fresh mount on every open
         $this->modalInstance++;
 
-        // ✅ allow init again
-        $this->initDispatchedForThisOpen = false;
+        $this->needsInertSync = true;
     }
 
-    public function rendered(): void
-    {
-        if (!$this->isOpen) return;
-        if (!$this->containsTinyMce) return;
-        if ($this->initDispatchedForThisOpen) return;
-
-        $this->initDispatchedForThisOpen = true;
-
-        // ✅ your existing listener ($wire.on('initialize-tiny-mce')) will catch this
-        $this->dispatch('initialize-tiny-mce');
-    }
-
-    #[On('close-modal')]
     public function closeModal(): void
     {
-        // ✅ IMPORTANT: destroy editors before hiding modal
         if ($this->containsTinyMce) {
-            $this->dispatch('tinymce-destroy');
+            $this->dispatch('tinymce-destroy-all');
         }
 
         $this->isOpen = false;
@@ -71,7 +51,15 @@ final class Modal extends Component
         $this->component = [];
         $this->containsTinyMce = false;
 
-        $this->initDispatchedForThisOpen = false;
+        $this->needsInertSync = true;
+    }
+
+    public function rendered(): void
+    {
+        if (!$this->needsInertSync) return;
+
+        $this->needsInertSync = false;
+        $this->dispatch('modal-sync-inert');
     }
 
     public function render()

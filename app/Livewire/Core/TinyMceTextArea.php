@@ -4,7 +4,7 @@ namespace App\Livewire\Core;
 
 use Livewire\Component;
 
-class TinyMceTextArea extends Component
+final class TinyMceTextArea extends Component
 {
     public string $content = '';
     public string $htmlId = '';
@@ -18,14 +18,11 @@ class TinyMceTextArea extends Component
 
     public function setContent(string $value): void
     {
-        // Prevent updates in view-only mode
         if ($this->viewOnly) {
             return;
         }
 
         $this->content = $value;
-
-        // Notify parent / listeners
         $this->dispatch($this->contentUpdatedEvent, $value);
     }
 
