@@ -55,6 +55,8 @@ final class Dialog extends Component
         "bonus" => "dialogs.delete.bonus",
         "global_transfer" => "dialogs.delete.global_transfer",
         "transfer" => "dialogs.delete.transfer",
+        'transfers'=>"dialogs.delete.transfers",
+        'empty_transfers'=>"dialogs.delete.transfers_amounts",
         "add_bonuses" => "dialogs.add.bonuses",
     ];
 
