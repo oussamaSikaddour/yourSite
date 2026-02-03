@@ -226,6 +226,8 @@ return [
         "delete" => "Delete Transfer",
         "update" => "Edit Transfer",
         "generate" => "Generate EDI File",
+"delete_bulk" => "Delete Selected Transfers",
+"empty_amount_bulk" => "Reset Amounts for Selected Transfers",
         "excel" => [
             "upload" => "Import Transfers",
             "export" => "Export Transfers",

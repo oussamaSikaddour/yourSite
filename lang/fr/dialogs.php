@@ -22,6 +22,9 @@ return [
         'slide' => 'Supprimer la Diapositive',
         'trend' => 'Supprimer la Tendance',
         'article' => 'Supprimer l\'Article',
+        "transfer" => "Supprimer le virement",
+        'transfers' => "Supprimer les virements",
+        'empty_transfers' => "Réinitialiser les montants",
     ],
     'delete' => [
         'our_quality' => 'Êtes-vous sûr de vouloir supprimer définitivement la qualité ":attribute" ?',
@@ -46,8 +49,11 @@ return [
         'article' => 'Êtes-vous sûr de vouloir supprimer définitivement l\'article ":attribute" ?',
         "global_transfer" => "Confirmer la suppression du transfert global : :attribute",
         "transfer" => "Confirmer la suppression du transfert employé : :attribute",
+        'transfers' => "Confirmez-vous la suppression des transferts des employés sélectionnés ?",
+'transfers_amounts' => "Procéder à la réinitialisation des montants de transfert pour les employés choisis ?",
         "bonus" => "Confirmer la suppression du bonus : :attribute",
     ],
+
 
     "add" => [
         'bonuses' => 'Attribuer un bonus de :attribute DA à tous les employés ?',

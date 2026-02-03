@@ -12,5 +12,7 @@
     </div>
 
 
+    <div class="row center">
     <livewire:core.super-admin.pages.landing.sections.about-us />
+    </div>
 @endsection

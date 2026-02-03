@@ -16,9 +16,9 @@ class ForDesktop extends Component
 
     // fired from toast success after admin changed their own roles
     #[On('logout-yourself')]
-    public function logout(): void
+    public function logout()
     {
-        $this->dispatch('redirect', url: route(RoutesNames::LOG_OUT->value));
+     return redirect()->route(RoutesNames::LOG_OUT->value);
     }
 
     #[Computed()]

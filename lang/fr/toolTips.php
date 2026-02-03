@@ -222,6 +222,8 @@ return [
         "delete" => "Supprimer le virement",
         "update" => "Modifier le virement",
         "generate" => "Générer le fichier EDI",
+        "delete_bulk" => "Supprimer les transferts sélectionnés",
+"empty_amount_bulk" => "Réinitialiser les montants des transferts sélectionnés",
         "excel" => [
             "upload" => "Importer les virements",
             "export" => "Exporter les virements",

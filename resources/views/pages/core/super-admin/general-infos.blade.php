@@ -11,5 +11,8 @@
 
     </div>
 
+    <div class="row center">
+
     <livewire:core.super-admin.general-infos />
+    </div>
 @endsection

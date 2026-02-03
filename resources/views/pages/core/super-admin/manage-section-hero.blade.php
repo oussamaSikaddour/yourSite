@@ -15,5 +15,7 @@
 
     </div>
 
+    <div class="row center">
     <livewire:core.super-admin.pages.landing.sections.hero />
+    </div>
 @endsection

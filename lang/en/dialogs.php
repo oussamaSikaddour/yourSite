@@ -27,8 +27,11 @@ return [
         'service' => 'Delete Service',
         "global_transfer" => "Delete Global Transfer",
         "transfer" => "Remove Transfer",
+        'transfers'=>"Delete Transfers",
+        'empty_transfers'=>"Clear Amounts",
         "bonus" => "Delete Bonus",
-        "add_bonuses" => "Assign Bonuses"
+        "add_bonuses" => "Assign Bonuses",
+
     ],
     'delete' => [
         //Core
@@ -56,7 +59,10 @@ return [
          'service' => 'Are you sure you want to permanently delete the service ":attribute"?',
         "global_transfer" => "Confirm deletion of global transfer: :attribute",
         "transfer" => "Confirm deletion of employee transfer: :attribute",
+         'transfers'=>"Ary you sure you want To delete The selected employees transfers ?",
+         'transfers_amounts' => "Confirm clearing of transfer amounts for selected employees?",
         "bonus" => "Confirm deletion of bonus: :attribute",
+
     ],
     "add" => [
         'bonuses' => 'Award a bonus of:attribute DA to all employees?',
