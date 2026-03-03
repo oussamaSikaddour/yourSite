@@ -26,17 +26,22 @@ use Livewire\WithPagination;
 
 class TransfersTable extends Component
 {
-    use WithPagination, WithFileUploads, TableTrait, GeneralTrait, TextAndPdfTrait, ResponseTrait, AppTrait;
+    use WithPagination, WithFileUploads;
+    use TableTrait, GeneralTrait, TextAndPdfTrait, ResponseTrait, AppTrait;
 
-    #[Url]
-    public $fullName = "";
-    #[Url]
-    public $account = "";
-    #[Url]
-    public $bank = "";
+    /* --------------------------------------------------------------------------
+     | URL Filters
+     * --------------------------------------------------------------------------*/
 
-    public bool $selectAll = false;
-    public array $selectedValues = [];
+    #[Url] public $fullName = "";
+    #[Url] public $account = "";
+    #[Url] public $bank = "";
+
+    /* --------------------------------------------------------------------------
+     | State
+     * --------------------------------------------------------------------------*/
+
+    public array $selectedTransfersIds = [];
     public $banksOptions = [];
     public $globalTransferId;
     public $sameAmount;
@@ -52,11 +57,26 @@ class TransfersTable extends Component
     public ?array $exportCache = null;
 
     protected array $filterable = ['fullName', 'account', 'bank'];
+
     protected array $validationRules = [
         'fullName' => ['nullable', 'string'],
         'account'  => ['nullable', 'string'],
         'bank'     => ['nullable', 'string'],
     ];
+
+    /* --------------------------------------------------------------------------
+     | Selection
+     * --------------------------------------------------------------------------*/
+
+    public function getSelectedTransfersIds()
+    {
+        $this->dispatch('get-selected-transfers-ids');
+    }
+
+    public function resetSelectedTransfersIds()
+    {
+        $this->dispatch('reset-selected-transfers-ids');
+    }
 
     /**
      * Clear selection when user changes pagination page
@@ -64,48 +84,28 @@ class TransfersTable extends Component
      */
     public function updatedPage(): void
     {
-        $this->selectedValues = [];
-        $this->selectAll = false;
+        $this->resetSelectedTransfersIds();
     }
 
-    public function updatedSelectAll($value): void
-    {
-        // Select ALL ids from CURRENT PAGE only
-        if ((bool) $value === true) {
-            $idsOnPage = $this->transfers->getCollection()->pluck('id')->all();
-            $this->selectedValues = $idsOnPage;
-        } else {
-            $this->selectedValues = [];
-        }
-    }
-
-    public function updatedSelectedValues(): void
-    {
-        // Keep selectAll synced with what is selected on CURRENT PAGE
-        $idsOnPage = $this->transfers->getCollection()->pluck('id')->all();
-
-        if (count($idsOnPage) === 0) {
-            $this->selectAll = false;
-            return;
-        }
-
-        // If every id on the page is in selectedValues => selectAll true
-        $this->selectAll = empty(array_diff($idsOnPage, $this->selectedValues));
-    }
+    /* --------------------------------------------------------------------------
+     | Bulk Dialogs
+     * --------------------------------------------------------------------------*/
 
     public function openDeleteBulkDialog(): void
     {
-        if (empty($this->selectedValues)) {
+        $this->getSelectedTransfersIds();
+
+        if (empty($this->selectedTransfersIds)) {
             $this->dispatch('open-errors', [__('tables.transfers.errors.no_selection')]);
             return;
         }
 
         $data = [
             "question" => "dialogs.title.transfers",
-            "details" => ["transfers", count($this->selectedValues)],
+            "details" => ["transfers", count($this->selectedTransfersIds)],
             "actionEvent" => [
                 "event" => "delete-bulk-transfers",
-                "parameters" => $this->selectedValues,
+                "parameters" => $this->selectedTransfersIds,
             ],
         ];
 
@@ -114,22 +114,28 @@ class TransfersTable extends Component
 
     public function openEmptyAmountBulkDialog(): void
     {
-        if (empty($this->selectedValues)) {
+        $this->getSelectedTransfersIds();
+
+        if (empty($this->selectedTransfersIds)) {
             $this->dispatch('open-errors', [__('tables.transfers.errors.selectedValues')]);
             return;
         }
 
         $data = [
             "question" => "dialogs.title.empty_transfers",
-            "details" => ["empty_transfers", count($this->selectedValues)],
+            "details" => ["empty_transfers", count($this->selectedTransfersIds)],
             "actionEvent" => [
                 "event" => "empty-amount-bulk-transfers",
-                "parameters" => $this->selectedValues,
+                "parameters" => $this->selectedTransfersIds,
             ],
         ];
 
         $this->dispatch("open-dialog", $data);
     }
+
+    /* --------------------------------------------------------------------------
+     | Bulk Actions
+     * --------------------------------------------------------------------------*/
 
     #[On("delete-bulk-transfers")]
     public function deleteBulkTransfers($ids): void
@@ -144,9 +150,7 @@ class TransfersTable extends Component
 
             BankTransfer::whereIn('id', $ids)->delete();
 
-            $this->selectedValues = [];
-            $this->selectAll = false;
-
+            $this->resetSelectedTransfersIds();
             $this->dispatch('open-toast', __('tables.transfers.success.delete'));
             $this->dispatch('update-transfers-table');
         } catch (\Exception $e) {
@@ -171,9 +175,7 @@ class TransfersTable extends Component
             // 2) If your DB column is not nullable, keep 0
             BankTransfer::whereIn('id', $ids)->update(['amount' => 0]);
 
-            $this->selectedValues = [];
-            $this->selectAll = false;
-
+            $this->resetSelectedTransfersIds();
             $this->dispatch('open-toast', __('tables.transfers.success.update'));
             $this->dispatch('update-transfers-table');
         } catch (\Exception $e) {
@@ -182,11 +184,19 @@ class TransfersTable extends Component
         }
     }
 
+    /* --------------------------------------------------------------------------
+     | Banks
+     * --------------------------------------------------------------------------*/
+
     #[Computed]
     public function banks()
     {
         return Bank::get(['id', 'acronym']);
     }
+
+    /* --------------------------------------------------------------------------
+     | Query builder + computed lists
+     * --------------------------------------------------------------------------*/
 
     public function prepareTransfers()
     {
@@ -266,6 +276,10 @@ class TransfersTable extends Component
         return $this->exportCache;
     }
 
+    /* --------------------------------------------------------------------------
+     | Mount
+     * --------------------------------------------------------------------------*/
+
     public function mount()
     {
         $this->local = app()->getLocale();
@@ -290,7 +304,10 @@ class TransfersTable extends Component
             ->first();
 
         if (!$this->activeAppBankingInfo) {
-            $this->dispatch('active-establishment-banking-info-not-found', __('tables.transfers.errors.not_found.active_establishment_banking_info'));
+            $this->dispatch(
+                'active-establishment-banking-info-not-found',
+                __('tables.transfers.errors.not_found.active_establishment_banking_info')
+            );
         }
     }
 
@@ -300,18 +317,23 @@ class TransfersTable extends Component
         $this->dispatch('open-errors', $e);
     }
 
+    /* --------------------------------------------------------------------------
+     | Filters
+     * --------------------------------------------------------------------------*/
+
     public function resetFilters(): void
     {
         $this->fullName = "";
         $this->account = "";
         $this->bank = "";
         $this->resetPage();
-
-        // Clear selection + export cache
-        $this->selectedValues = [];
-        $this->selectAll = false;
         $this->exportCache = null;
+        $this->resetSelectedTransfersIds();
     }
+
+    /* --------------------------------------------------------------------------
+     | Single delete dialog + action
+     * --------------------------------------------------------------------------*/
 
     public function openDeleteDialog($transfer): void
     {
@@ -327,10 +349,6 @@ class TransfersTable extends Component
         $this->dispatch("open-dialog", $data);
     }
 
-    /**
-     * FIXED:
-     * We accept array or ID and delete by key.
-     */
     #[On("delete-transfer")]
     public function deleteTransfer($transfer): void
     {
@@ -346,6 +364,10 @@ class TransfersTable extends Component
         }
     }
 
+    /* --------------------------------------------------------------------------
+     | Bonuses
+     * --------------------------------------------------------------------------*/
+
     #[On("selected-bonuses")]
     public function selectBonuses($data): void
     {
@@ -360,13 +382,14 @@ class TransfersTable extends Component
     public function openAddBonusesDialog(): void
     {
         $this->dialogOpen = true;
+        $this->getSelectedTransfersIds();
 
         if (!isset($this->sameAmount)) {
             $this->dispatch('open-errors', [__('tables.transfers.errors.bonuses.not_set')]);
             return;
         }
 
-        if (empty($this->selectedValues)) {
+        if (empty($this->selectedTransfersIds)) {
             $this->dispatch('open-errors', [__('tables.transfers.errors.selectedValues')]);
             return;
         }
@@ -378,7 +401,7 @@ class TransfersTable extends Component
                 'event' => 'add-sameAmount-selected',
                 'parameters' => [
                     'sameAmount' => $this->sameAmount,
-                    'ids' => $this->selectedValues,
+                    'ids' => $this->selectedTransfersIds,
                 ],
             ],
         ];
@@ -386,10 +409,6 @@ class TransfersTable extends Component
         $this->dispatch("open-dialog", $data);
     }
 
-    /**
-     * Improved: single SQL update instead of per-row loop
-     * (Requires amount to be numeric/decimal in DB for best results)
-     */
     #[On("add-sameAmount-selected")]
     public function addBonusesToSelectedTransfers($payload): void
     {
@@ -410,10 +429,9 @@ class TransfersTable extends Component
             BankTransfer::whereIn('id', $ids)
                 ->update(['amount' => DB::raw("amount + {$sameAmount}")]);
 
-            $this->selectedValues = [];
-            $this->selectAll = false;
             $this->dialogOpen = false;
 
+            $this->resetSelectedTransfersIds();
             $this->dispatch('open-toast', __('tables.transfers.success.bonus.add'));
             $this->dispatch('update-transfers-table');
         } catch (\Exception $e) {
@@ -422,11 +440,19 @@ class TransfersTable extends Component
         }
     }
 
+    /* --------------------------------------------------------------------------
+     | File download (errors)
+     * --------------------------------------------------------------------------*/
+
     #[On('errors-file-data')]
     public function downloadUsersErrorsTextFile($errorsFileData)
     {
         return $this->streamFileDownload($errorsFileData['filePath'], $errorsFileData['fileName']);
     }
+
+    /* --------------------------------------------------------------------------
+     | EDI / PDF Slip
+     * --------------------------------------------------------------------------*/
 
     public function generateEDI()
     {
@@ -471,6 +497,10 @@ class TransfersTable extends Component
         }
     }
 
+    /* --------------------------------------------------------------------------
+     | Livewire updated hook
+     * --------------------------------------------------------------------------*/
+
     public function updated(string $property): void
     {
         // Clear export cache when anything important changes
@@ -491,7 +521,7 @@ class TransfersTable extends Component
         }
 
         if (in_array($property, $this->filterable) || $property === 'perPage') {
-            $this->selectedValues = [];
+            $this->selectedTransfersIds = [];
             $this->selectAll = false;
             $this->resetPage();
         }
@@ -505,10 +535,18 @@ class TransfersTable extends Component
         }
     }
 
+    /* --------------------------------------------------------------------------
+     | Render
+     * --------------------------------------------------------------------------*/
+
     public function render()
     {
         return view('livewire.app.social-admin.transfers-table');
     }
+
+    /* --------------------------------------------------------------------------
+     | EDI internals
+     * --------------------------------------------------------------------------*/
 
     private function generateHeader()
     {
