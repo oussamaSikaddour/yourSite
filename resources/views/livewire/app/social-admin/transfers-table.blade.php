@@ -1,4 +1,4 @@
-<div class="table__container" x-on:update-transfers-table.window="$wire.$refresh()">
+<div class="table__container" x-on:update-transfers-table.window="$wire.$refresh()" id="transfersTCId">
     <div class="table__header">
         <span wire:loading wire:target="selectedValues,selectAll">
             <x-core.loading />
@@ -8,16 +8,16 @@
 
         <div class="table__header__actions">
 
-            @if (!empty($selectedValues))
+
                 <x-core.button variant="danger" hasTooltip=true :tooltip="__('toolTips.transfer.delete_bulk')" icon="delete"
-                    function="openDeleteBulkDialog" rounded="true" :disabled="empty($selectedValues)" />
+                    function="openDeleteBulkDialog" rounded="true"  />
 
                 <x-core.button variant="danger" hasTooltip=true :tooltip="__('toolTips.transfer.empty_amount_bulk')" icon="zero"
-                    function="openEmptyAmountBulkDialog" rounded="true" :disabled="empty($selectedValues)" />
+                    function="openEmptyAmountBulkDialog" rounded="true"  />
 
                 <x-core.button hasTooltip=true :tooltip="__('toolTips.transfer.bonuses')" icon="bonus" function="openAddBonusesDialog"
-                    rounded="true" :disabled="empty($selectedValues)" />
-            @endif
+                    rounded="true"  />
+
 
 
             <x-core.button hasTooltip=true :tooltip="__('toolTips.transfer.generate')" icon="wallet" function="generateEDI" rounded='true' />
@@ -56,15 +56,7 @@
     </div>
 
     @if (isset($this->transfers) && $this->transfers->isNotEmpty())
-        @php
-            // Option A: current page only
-            $pageIds = $this->transfers->getCollection()->pluck('id')->all();
-            $selectedValues = $selectedValues ?? [];
-            $selectedOnPage = array_values(array_intersect($selectedValues, $pageIds));
 
-            $allSelectedOnPage = count($pageIds) > 0 && count($selectedOnPage) === count($pageIds);
-            $someSelectedOnPage = count($selectedOnPage) > 0 && count($selectedOnPage) < count($pageIds);
-        @endphp
 
         <div class="table__body">
             <table class="table">
@@ -73,16 +65,9 @@
                         <th></th>
 
                         {{-- Select All (current page only) --}}
-                        <th x-data="{
-                            setIndeterminate() {
-                                const input = this.$el.querySelector('input');
-                                if (!input) return;
-                                input.indeterminate = @js($someSelectedOnPage);
-                            }
-                        }" x-init="setIndeterminate()" x-effect="setIndeterminate()">
+                        <th >
                             {{-- boolean checkbox: use value=1 (avoid value=0 weirdness) --}}
-                            <x-core.form.check-box model="selectAll" htmlId="tbSAll" value="1"
-                                :live="true" />
+                            <x-core.form.check-box  htmlId="tbSAll" class="select_all" />
                         </th>
 
                         <th scope="column">
@@ -107,8 +92,8 @@
 
                             {{-- Per-row checkbox (multi-select) --}}
                             <td>
-                                <x-core.form.check-box model="selectedValues" htmlId="{{ 'tbkey' . $tb->id }}"
-                                    value="{{ $tb->id }}" :live="true" />
+                                <x-core.form.check-box  htmlId="{{ 'tbkey' . $tb->id }}"
+                                    value="{{ $tb->id }}" class="select_one" />
                             </td>
 
                             <td>
@@ -140,3 +125,46 @@
         </div>
     @endif
 </div>
+
+
+@script
+<script>
+    $wire.on('get-selected-transfers-ids', () => {
+
+        // Select table container
+        const container = document.getElementById('transfersTCId');
+        if (!container) return;
+
+        // Get all checked row checkboxes
+        const checkedBoxes = container.querySelectorAll('input.select_one[type="checkbox"]:checked');
+
+        // Extract values (IDs)
+        const ids = Array.from(checkedBoxes).map(cb => cb.value);
+
+        // Send to Livewire
+        $wire.set('selectedTransfersIds', ids);
+    });
+
+
+    $wire.on('reset-selected-transfers-ids', () => {
+
+        // Select table container
+        const container = document.getElementById('transfersTCId');
+        if (!container) return;
+
+        // Uncheck select_all
+        const selectAll = container.querySelector('input.select_all[type="checkbox"]');
+        if (selectAll) {
+            selectAll.checked = false;
+            selectAll.indeterminate = false;
+        }
+
+        // Uncheck all select_one
+        const rowCheckboxes = container.querySelectorAll('input.select_one[type="checkbox"]');
+        rowCheckboxes.forEach(cb => cb.checked = false);
+
+        // Reset Livewire state
+        $wire.set('selectedTransfersIds', []);
+    });
+</script>
+@endscript
