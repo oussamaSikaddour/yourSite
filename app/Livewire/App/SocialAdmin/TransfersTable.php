@@ -41,7 +41,6 @@ class TransfersTable extends Component
      | State
      * --------------------------------------------------------------------------*/
 
-    public array $selectedTransfersIds = [];
     public $banksOptions = [];
     public $globalTransferId;
     public $sameAmount;
@@ -53,7 +52,6 @@ class TransfersTable extends Component
     public $local = "fr";
     public $reference = "001";
 
-    // Cache for export to avoid repeated queries in same request
     public ?array $exportCache = null;
 
     protected array $filterable = ['fullName', 'account', 'bank'];
@@ -65,26 +63,22 @@ class TransfersTable extends Component
     ];
 
     /* --------------------------------------------------------------------------
-     | Selection
+     | Helpers
      * --------------------------------------------------------------------------*/
 
-    public function getSelectedTransfersIds()
+    protected function getFilteredTransferIds(): array
     {
-        $this->dispatch('get-selected-transfers-ids');
+        return (clone $this->prepareTransfers())
+            ->select('bank_transfers.id')
+            ->pluck('bank_transfers.id')
+            ->unique()
+            ->values()
+            ->toArray();
     }
 
-    public function resetSelectedTransfersIds()
+    protected function getFilteredTransfersCount(): int
     {
-        $this->dispatch('reset-selected-transfers-ids');
-    }
-
-    /**
-     * Clear selection when user changes pagination page
-     * (keeps "Select All = current page only" consistent)
-     */
-    public function updatedPage(): void
-    {
-        $this->resetSelectedTransfersIds();
+        return count($this->getFilteredTransferIds());
     }
 
     /* --------------------------------------------------------------------------
@@ -93,19 +87,19 @@ class TransfersTable extends Component
 
     public function openDeleteBulkDialog(): void
     {
-        $this->getSelectedTransfersIds();
+        $count = $this->getFilteredTransfersCount();
 
-        if (empty($this->selectedTransfersIds)) {
-            $this->dispatch('open-errors', [__('tables.transfers.errors.no_selection')]);
+        if ($count === 0) {
+            $this->dispatch('open-errors', [__('tables.transfers.errors.empty')]);
             return;
         }
 
         $data = [
             "question" => "dialogs.title.transfers",
-            "details" => ["transfers", count($this->selectedTransfersIds)],
+            "details" => ["transfers", $count],
             "actionEvent" => [
                 "event" => "delete-bulk-transfers",
-                "parameters" => $this->selectedTransfersIds,
+                "parameters" => [],
             ],
         ];
 
@@ -114,19 +108,19 @@ class TransfersTable extends Component
 
     public function openEmptyAmountBulkDialog(): void
     {
-        $this->getSelectedTransfersIds();
+        $count = $this->getFilteredTransfersCount();
 
-        if (empty($this->selectedTransfersIds)) {
-            $this->dispatch('open-errors', [__('tables.transfers.errors.selectedValues')]);
+        if ($count === 0) {
+            $this->dispatch('open-errors', [__('tables.transfers.errors.empty')]);
             return;
         }
 
         $data = [
             "question" => "dialogs.title.empty_transfers",
-            "details" => ["empty_transfers", count($this->selectedTransfersIds)],
+            "details" => ["empty_transfers", $count],
             "actionEvent" => [
                 "event" => "empty-amount-bulk-transfers",
-                "parameters" => $this->selectedTransfersIds,
+                "parameters" => [],
             ],
         ];
 
@@ -138,10 +132,10 @@ class TransfersTable extends Component
      * --------------------------------------------------------------------------*/
 
     #[On("delete-bulk-transfers")]
-    public function deleteBulkTransfers($ids): void
+    public function deleteBulkTransfers(): void
     {
         try {
-            $ids = is_array($ids) ? $ids : [];
+            $ids = $this->getFilteredTransferIds();
 
             if (empty($ids)) {
                 $this->dispatch('open-errors', [__('tables.transfers.errors.empty')]);
@@ -150,7 +144,9 @@ class TransfersTable extends Component
 
             BankTransfer::whereIn('id', $ids)->delete();
 
-            $this->resetSelectedTransfersIds();
+            $this->exportCache = null;
+            $this->resetPage();
+
             $this->dispatch('open-toast', __('tables.transfers.success.delete'));
             $this->dispatch('update-transfers-table');
         } catch (\Exception $e) {
@@ -160,22 +156,20 @@ class TransfersTable extends Component
     }
 
     #[On("empty-amount-bulk-transfers")]
-    public function emptyAmountBulkTransfers($ids): void
+    public function emptyAmountBulkTransfers(): void
     {
         try {
-            $ids = is_array($ids) ? $ids : [];
+            $ids = $this->getFilteredTransferIds();
 
             if (empty($ids)) {
                 $this->dispatch('open-errors', [__('tables.transfers.errors.empty')]);
                 return;
             }
 
-            // IMPORTANT: decide what you want:
-            // 1) If "empty" means NULL, use null
-            // 2) If your DB column is not nullable, keep 0
             BankTransfer::whereIn('id', $ids)->update(['amount' => 0]);
 
-            $this->resetSelectedTransfersIds();
+            $this->exportCache = null;
+
             $this->dispatch('open-toast', __('tables.transfers.success.update'));
             $this->dispatch('update-transfers-table');
         } catch (\Exception $e) {
@@ -200,20 +194,16 @@ class TransfersTable extends Component
 
     public function prepareTransfers()
     {
-        // Detect Arabic input if any
         $isArabic = $this->fullName && preg_match('/\p{Arabic}/u', $this->fullName);
 
-        // Resolve locale
         $local = $this->local === 'ar' ? 'ar' : 'fr';
 
-        // Choose name columns
         $lastNameColumn  = $isArabic ? 'last_name_ar'  : "last_name_{$local}";
         $firstNameColumn = $isArabic ? 'first_name_ar' : "first_name_{$local}";
 
-        // Use COALESCE to prevent CONCAT returning NULL
         $fullNameExpression = DB::raw("CONCAT(COALESCE($lastNameColumn,''), ' ', COALESCE($firstNameColumn,''))");
 
-        $query = BankTransfer::query()
+        return BankTransfer::query()
             ->leftJoin('persons', 'bank_transfers.person_id', '=', 'persons.id')
             ->leftJoin('banking_information', function ($join) {
                 $join->on('persons.id', '=', 'banking_information.bankable_id')
@@ -221,32 +211,22 @@ class TransfersTable extends Component
                     ->where('banking_information.is_active', true);
             })
             ->leftJoin('banks', 'banking_information.bank_id', '=', 'banks.id')
-
-            // Full name filter
             ->when($this->fullName, function ($q) use ($fullNameExpression) {
                 $q->where($fullNameExpression, 'like', '%' . $this->fullName . '%');
             })
-
-            // Account filter
             ->when($this->account, fn($q) =>
                 $q->where('banking_information.account_number', 'like', '%' . $this->account . '%')
             )
-
-            // Bank filter
             ->when($this->bank, fn($q) =>
                 $q->where('banks.id', $this->bank)
             )
-
             ->where('bank_transfers.global_bank_transfer_id', $this->globalTransferId)
-
             ->select(
                 'bank_transfers.*',
                 DB::raw("CONCAT(COALESCE($lastNameColumn,''), ' ', COALESCE($firstNameColumn,'')) as beneficiary"),
                 'banking_information.account_number as account',
                 'banks.acronym as bank'
             );
-
-        return $query;
     }
 
     #[Computed]
@@ -292,8 +272,10 @@ class TransfersTable extends Component
         );
 
         $this->globalTransfer = GlobalBankTransfer::find($this->globalTransferId);
+
         if (!$this->globalTransfer) {
             $this->dispatch('open-errors', [__("tables.transfers.errors.nopt_found.global_transfer")]);
+            return;
         }
 
         $this->operationDate = Carbon::parse($this->globalTransfer->date);
@@ -328,7 +310,6 @@ class TransfersTable extends Component
         $this->bank = "";
         $this->resetPage();
         $this->exportCache = null;
-        $this->resetSelectedTransfersIds();
     }
 
     /* --------------------------------------------------------------------------
@@ -354,7 +335,10 @@ class TransfersTable extends Component
     {
         try {
             $id = data_get($transfer, 'id', $transfer);
+
             BankTransfer::whereKey($id)->delete();
+
+            $this->exportCache = null;
 
             $this->dispatch('open-toast', __('tables.transfers.success.delete'));
             $this->dispatch('update-transfers-table');
@@ -382,15 +366,16 @@ class TransfersTable extends Component
     public function openAddBonusesDialog(): void
     {
         $this->dialogOpen = true;
-        $this->getSelectedTransfersIds();
 
         if (!isset($this->sameAmount)) {
             $this->dispatch('open-errors', [__('tables.transfers.errors.bonuses.not_set')]);
             return;
         }
 
-        if (empty($this->selectedTransfersIds)) {
-            $this->dispatch('open-errors', [__('tables.transfers.errors.selectedValues')]);
+        $count = $this->getFilteredTransfersCount();
+
+        if ($count === 0) {
+            $this->dispatch('open-errors', [__('tables.transfers.errors.empty')]);
             return;
         }
 
@@ -398,10 +383,9 @@ class TransfersTable extends Component
             'question' => 'dialogs.title.add_bonuses',
             'details' => ['add_bonuses', $this->sameAmount],
             'actionEvent' => [
-                'event' => 'add-sameAmount-selected',
+                'event' => 'add-bonuses-to-all-transfers',
                 'parameters' => [
                     'sameAmount' => $this->sameAmount,
-                    'ids' => $this->selectedTransfersIds,
                 ],
             ],
         ];
@@ -409,20 +393,21 @@ class TransfersTable extends Component
         $this->dispatch("open-dialog", $data);
     }
 
-    #[On("add-sameAmount-selected")]
-    public function addBonusesToSelectedTransfers($payload): void
+    #[On("add-bonuses-to-all-transfers")]
+    public function addBonusesToAllTransfers($payload): void
     {
         try {
             $sameAmount = (float) data_get($payload, 'sameAmount', 0);
-            $ids = data_get($payload, 'ids', []);
 
             if ($sameAmount == 0) {
                 $this->dispatch('open-errors', [__('tables.transfers.errors.bonuses.not_set')]);
                 return;
             }
 
-            if (!is_array($ids) || empty($ids)) {
-                $this->dispatch('open-errors', [__('tables.transfers.errors.bonuses.not_selected')]);
+            $ids = $this->getFilteredTransferIds();
+
+            if (empty($ids)) {
+                $this->dispatch('open-errors', [__('tables.transfers.errors.empty')]);
                 return;
             }
 
@@ -430,12 +415,12 @@ class TransfersTable extends Component
                 ->update(['amount' => DB::raw("amount + {$sameAmount}")]);
 
             $this->dialogOpen = false;
+            $this->exportCache = null;
 
-            $this->resetSelectedTransfersIds();
             $this->dispatch('open-toast', __('tables.transfers.success.bonus.add'));
             $this->dispatch('update-transfers-table');
         } catch (\Exception $e) {
-            Log::error('Error adding bonuses to selected transfers: ' . $e->getMessage());
+            Log::error('Error adding bonuses to transfers: ' . $e->getMessage());
             $this->dispatch('open-errors', [__('forms.common.errors.default')]);
         }
     }
@@ -465,6 +450,7 @@ class TransfersTable extends Component
         $textFile = $this->generateTextFile($ediLines, $filename);
 
         $this->dispatch('print-transfer-slip');
+
         return $this->streamFileDownload($textFile['filePath'], $textFile['fileName']);
     }
 
@@ -503,7 +489,6 @@ class TransfersTable extends Component
 
     public function updated(string $property): void
     {
-        // Clear export cache when anything important changes
         if (in_array($property, $this->filterable) || $property === 'perPage') {
             $this->exportCache = null;
         }
@@ -521,8 +506,6 @@ class TransfersTable extends Component
         }
 
         if (in_array($property, $this->filterable) || $property === 'perPage') {
-            $this->selectedTransfersIds = [];
-            $this->selectAll = false;
             $this->resetPage();
         }
 
